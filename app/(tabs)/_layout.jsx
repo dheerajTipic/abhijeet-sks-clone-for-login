@@ -3,6 +3,7 @@ import React from 'react'
 import { Tabs } from 'expo-router'
 import Ionicons from '@expo/vector-icons/Ionicons';
 
+
 export default function Tablayout() {
   return (
    <Tabs screenOptions={{headerShown:false}}>
@@ -29,14 +30,14 @@ export default function Tablayout() {
      <Tabs.Screen name ='service_info'
       options={{
         tabBarLabel:'ServiceInfo',
-        tabBarIcon:({color} )=><Ionicons name="settings" size={24} color={color} />
+        tabBarIcon:({color} )=><Ionicons name="person" size={24} color={color} />
 
     }}
     />
     <Tabs.Screen name ='profile'   
      options={{
         tabBarLabel:'Profile',
-        tabBarIcon:({color} )=><Ionicons name="person" size={24} color={color} />
+        tabBarIcon:({color} )=><Ionicons name="person-circle" size={24} color={color} />
 
     }}
     />

@@ -1,26 +1,24 @@
+
+import {Image,ScrollView} from 'react-native';
 import React, { useState } from 'react';
-import { View, Text, TextInput, Button, StyleSheet,Image,ScrollView,TouchableOpacity} from 'react-native';
+import { View,Text, StyleSheet } from 'react-native';
+import { TextInput } from '@react-native-material/core';
 import { Picker } from '@react-native-picker/picker';
-import Icon from 'react-native-vector-icons/Ionicons';
+
+
 
 const Serviceinfo = () => {
-  const [customerName, setCustomerName] = useState('');
-  const [address, setAddress] = useState('');
-  const [contactPerson, setContactPerson] = useState('');
-  const [email, setEmail] = useState('');
-  const [selectedOption, setSelectedOption] = useState('');
-  const [selectedOption2, setSelectedOption2] = useState('');
+  const [visit, setVisit] = useState('');
+  const [actualFault,setActualFault] = useState('');
+  const [actionteken, setActionTeken] = useState(''); 
+  const [selectedOption3, setSelectedOption3] = useState(''); 
+  
 
 
-  const handleSubmit = () => {
+   const handleSubmit = () => {
     // Handle form submission logic here
     console.log({
-      customerName,
-      address,
-      contactPerson,
-      email,
-      selectedOption,
-      selectedOption2,
+     
     });
   };
 
@@ -37,7 +35,44 @@ const Serviceinfo = () => {
     />
     <Text style={styles.logoHeading}>SMART KITCHEN SOLUTION</Text>
       <View style={styles.Line1}></View>
- <ScrollView contentContainerStyle={styles.scrollContainer}>
+
+     
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+      <View style={styles.incontainer}>
+      <TextInput variant="outlined" label="Nature of complaint/visit" style={{ margin: 12}}
+       value={visit}
+       onChangeText={setVisit}
+       multiline
+     maxLength={200} 
+       />
+        <TextInput variant="outlined" label="Actual foult" style={{ margin: 12}}
+       value={actualFault}
+       onChangeText={setActualFault}
+       multiline
+     maxLength={200} 
+       />
+       <TextInput variant="outlined" label="Action Taken" style={{ margin: 12}}
+       value={actionteken}
+       onChangeText={setActionTeken}
+       multiline
+     maxLength={200} 
+       />
+
+<Picker
+            selectedValue={selectedOption3}
+            style={styles.picker}
+            onValueChange={(itemValue) => setSelectedOption3(itemValue)}
+          >
+            <Picker.Item label="Select Remark" value="optiona1" />
+            <Picker.Item label="Working Fully" value="optiona2" />
+            <Picker.Item label="Working Moderately" value="optiona3" />
+            <Picker.Item label="Working" value="optiona4" />
+            
+          </Picker>
+      
+      
+    </View>
+
 
       
 
@@ -45,10 +80,7 @@ const Serviceinfo = () => {
 
       
 
-   <TouchableOpacity style={styles.customButton} onPress={handleSubmit}>
-      { <Text style={styles.buttonText}>Save And Next</Text> }
-      <Icon name="arrow-forward" size={30} color="#fff" style={styles.icon} />
-    </TouchableOpacity>
+  
          
       
       </ScrollView>
@@ -64,28 +96,10 @@ const styles = StyleSheet.create({
     paddingTop:30,
     backgroundColor: '#f5f5f5',
   },
-  label: {
-    fontSize: 16,
-    marginBottom: 8,
-    fontWeight: 'bold',
+  
     
-  },
-  input: {
-    height: 48,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 20,
-    paddingHorizontal: 10,
-    backgroundColor: '#fff',
-  },
-  picker: {
-   
-      borderColor: '#ccc',
-      borderWidth: 1,
-      borderRadius: 5,
-      marginBottom: 20,
-      backgroundColor: '#fff',
-  },
+  
+ 
   image: {
     width: '40%',
     height: 40,
@@ -96,22 +110,7 @@ const styles = StyleSheet.create({
   },
     
    
-  customButton: {
-    backgroundColor: 'gray',  // Button background color
-    paddingVertical: 12,         // Vertical padding for the button
-    paddingHorizontal: 20,       // Horizontal padding for the button
-    borderRadius: 8,             // Rounded corners
-    borderWidth: 2,              // Border size (thickness)
-    borderColor: 'black',      // Border color
-    alignItems: 'center',        // Centers the text inside the button
-    marginBottom: 20, 
-    marginHorizontal: 35,           // Adds a bottom margin to the button
-  },
-  buttonText: {
-    color: '#fff',               // Text color
-    fontSize: 16,                // Text size
-    fontWeight: 'bold',          // Bold text
-  },
+
     
     Line1: {
       width: '100%', // Full width of the parent container
@@ -127,6 +126,33 @@ const styles = StyleSheet.create({
       alignSelf:'center',
       
     },
+    incontainer: {
+      flex: 1,
+     
+      padding: 10,
+      
+    },
+    pickerContainer: {
+      marginVertical: 5,
+      marginBottom: 16,
+      flex: 1,
+      justifyContent: 'center',
+      
+    },
+    picker: {
+      borderColor: '#ccc',
+      borderWidth: 2,
+      borderRadius: 50,  // Rounded corners
+      backgroundColor: '#fff',
+      paddingHorizontal: 10,
+      height: 48,
+      justifyContent: 'center',
+      elevation: 3,
+      margin: 7,
+      marginBottom: 15,
+      marginHorizontal: 13,
+    },
+   
 });
 
 export default Serviceinfo;

@@ -151,7 +151,9 @@ const CustomerInfo = () => {
         <TextInput
           variant="outlined"
           label="Search Customer..."
-          style={{ margin: 15 }}
+          style={{ marginHorizontal: 10,marginTop:30,
+            
+           }}
           value={searchQuery}
           onChangeText={handleSearch}
         />
@@ -169,35 +171,10 @@ const CustomerInfo = () => {
           />
         )}
 
-        {/* Conditionally render the model search box */}
-        {isCustomerSelected && (
-          <>
-            <TextInput
-              variant="outlined"
-              label="Search Model..."
-              style={{ margin: 15 }}
-              value={searchModelQuery}
-              onChangeText={handleModelSearch}
-            />
-            {filteredModelData.length > 0 && (
-              <FlatList
-                data={filteredModelData}
-                keyExtractor={(item) => item}
-                renderItem={({ item }) => (
-                  <TouchableOpacity onPress={() => handleSelectModelItem(item)}>
-                    <Text style={styles.suggestionItem}>{item}</Text>
-                  </TouchableOpacity>
-                  
-                )}
-              />
-            )}
-          </>
-        )}
-       
-     <>
-      <Button
+<>
+      <Button style={styles.dailogBtn}
         title="New Customer"
-        style={{ margin:60 }}
+        //style={{ margin:60 }}
         onPress={() => setVisible(true)}
       />
       <Dialog style={{borderRadius: 20}} visible={visible} onDismiss={() => setVisible(false)}>
@@ -253,6 +230,33 @@ const CustomerInfo = () => {
       </Dialog>
     </>
 
+        {/* Conditionally render the model search box */}
+        {isCustomerSelected && (
+          <>
+            <TextInput
+              variant="outlined"
+              label="Search Model..."
+              style={{ marginHorizontal: 10,marginTop:30 }}
+              value={searchModelQuery}
+              onChangeText={handleModelSearch}
+            />
+            {filteredModelData.length > 0 && (
+              <FlatList
+                data={filteredModelData}
+                keyExtractor={(item) => item}
+                renderItem={({ item }) => (
+                  <TouchableOpacity onPress={() => handleSelectModelItem(item)}>
+                    <Text style={styles.suggestionItem}>{item}</Text>
+                  </TouchableOpacity>
+                  
+                )}
+              />
+            )}
+          </>
+        )}
+       
+     
+
 
         
         
@@ -269,11 +273,19 @@ const CustomerInfo = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // padding: 5,
-    // paddingTop: 30,
-    // backgroundColor: '#f5f5f5',
+     padding: 5,
+     paddingTop: 30,
+     backgroundColor: '#f5f5f5',
     
   },
+  dailogBtn:{
+    marginStart:255,
+    alignSelf:'flex-end',
+    marginEnd:10,
+   
+//marginHorizontal:,
+  },
+
   suggestionItem: {
     padding: 10,
     borderBottomWidth: 1,

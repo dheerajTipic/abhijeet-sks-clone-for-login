@@ -346,9 +346,6 @@ setEmail('');
                 )}
               />
             )}
-          </>
-        )}
-
 <TextInput
           variant="outlined"
           label="Serial No:"
@@ -357,7 +354,8 @@ setEmail('');
           value ={serialNo}
           onChangeText={handleSearch}
         />
-        <TextInput
+
+<TextInput
           variant="outlined"
           label="Equipment Name:"
           style={styles.searchInput}
@@ -365,6 +363,11 @@ setEmail('');
           value ={serialNo}
           onChangeText={handleSearch}
         />
+          </>
+        )}
+
+
+        
 
         <TouchableOpacity style={styles.customButton} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Save</Text>

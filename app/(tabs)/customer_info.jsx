@@ -1,42 +1,176 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, FlatList } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, FlatList, Animated, Easing, Modal } from 'react-native';
 import { useRouter } from 'expo-router';
-//import { PortalProvider, TextInput } from "@react-native-material/core";
+import { Provider, Stack, Button, DialogHeader, DialogContent, DialogActions, TextInput } from "@react-native-material/core";
 
-import {
-  Provider,
-  Stack,
-  Button,
-  Dialog,
-  DialogHeader,
-  DialogContent,
-  DialogActions,
-  //Text,
-  TextInput,
-} from "@react-native-material/core";
+const AnimatedDialog = ({ visible, onClose, onSubmit, customerName, setCustomerName, address, setAddress, contactPerson, setContactPerson, email, setEmail, error }) => {
+  const [show, setShow] = useState(visible);
+  const scaleValue = useRef(new Animated.Value(0)).current;
+  const opacityValue = useRef(new Animated.Value(0)).current;
+  const translateYValue = useRef(new Animated.Value(50)).current;
+  const [errord, setErrord] = useState('');
+  const router = useRouter();
+  const handleSubmitd = () => {
+    // value={searchModelQuery}
+    // value={searchModelQuery}
+if (customerName.trim() === '' || address.trim() === '' || contactPerson.trim() === '' || email.trim() === '') {  
+setErrord('All fields are required!');
 
+} else {
+setErrord('');
+router.push('/service_info');
+setCustomerName('');
+setAddress('');
+setContactPerson('');
+setEmail('');
+//setSearchQuery('');
+//setSearchModelQuery('');
+//setFilteredData([]);
+//setFilteredModelData([]);
+//setIsCustomerSelected(false);
+}
+};
 
+  useEffect(() => {
+    if (visible) {
+      setShow(true);
+      Animated.parallel([
+        Animated.timing(scaleValue, {
+          toValue: 1,
+          duration: 300,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }).start(),
+        Animated.timing(opacityValue, {
+          toValue: 1,
+          duration: 300,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }).start(),
+        Animated.timing(translateYValue, {
+          toValue: 0,
+          duration: 300,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }).start(),
+      ]);
+    } else {
+      Animated.parallel([
+        Animated.timing(scaleValue, {
+          toValue: 0,
+          duration: 300,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }).start(),
+        Animated.timing(opacityValue, {
+          toValue: 0,
+          duration: 300,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }).start(),
+        Animated.timing(translateYValue, {
+          toValue: 50,
+          duration: 300,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }).start(() => setShow(false)),
+      ]);
+    }
+  }, [visible]);
+
+  return (
+    <Modal transparent visible={show} animationType="none">
+      <View style={styles.overlay}>
+        <Animated.View
+          style={[
+            styles.dialogContainer,
+            {
+              transform: [
+                { scale: scaleValue },
+                { translateY: translateYValue },
+              ],
+              opacity: opacityValue,
+            },
+          ]}
+        >
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <DialogHeader title="         New Customer" style={styles.dialogHeader} />
+            <View style={styles.Line1} />
+            {errord ? <Text style={styles.errorTextd}>{errord}</Text> : null}
+            <DialogContent>
+              <Stack spacing={2}>
+                <TextInput
+                  variant="outlined"
+                  label="Customer name"
+                  style={styles.input}
+                  value={customerName}
+                  onChangeText={setCustomerName}
+                />
+                <TextInput
+                  variant="outlined"
+                  label="Address"
+                  style={styles.input}
+                  value={address}
+                  onChangeText={setAddress}
+                />
+                <TextInput
+                  variant="outlined"
+                  label="Contact person"
+                  style={styles.input}
+                  value={contactPerson}
+                  onChangeText={setContactPerson}
+                />
+                <TextInput
+                  variant="outlined"
+                  label="Email"
+                  style={styles.input}
+                  value={email}
+                  onChangeText={setEmail}
+                />
+                <Button
+                  title="Save"
+                  compact
+                  style={{marginTop:10, borderBottomWidth:2}}
+                  variant="text"
+                  onPress={handleSubmitd}
+                />
+              </Stack>
+            </DialogContent>
+            <DialogActions>
+              {/* <Button
+                title="Cancel"
+                compact
+                variant="text"
+                onPress={onClose}
+              /> */}
+              <Button
+                title="Ok"
+                compact
+                variant="text"
+                onPress={onClose}
+              />
+            </DialogActions>
+          </ScrollView>
+        </Animated.View>
+      </View>
+    </Modal>
+  );
+};
 
 const CustomerInfo = () => {
   const [customerName, setCustomerName] = useState('');
   const [address, setAddress] = useState('');
   const [contactPerson, setContactPerson] = useState('');
   const [email, setEmail] = useState('');
-  const [selectedOption, setSelectedOption] = useState('');
-  const [selectedOption2, setSelectedOption2] = useState('');
-  const [otherCall, setOtherCall] = useState('');
-  const [modelNo, setModelNo] = useState('');
-  const [serialNo, setSerialNo] = useState('');
-  const [equipmentName, setEquipmentName] = useState('');
   const [error, setError] = useState('');
+  const [errord, setErrord] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchModelQuery, setSearchModelQuery] = useState('');
   const [filteredData, setFilteredData] = useState([]);
   const [filteredModelData, setFilteredModelData] = useState([]);
   const [isCustomerSelected, setIsCustomerSelected] = useState(false);
   const [visible, setVisible] = useState(false);
-  const [isButtonVisible, setButtonVisible] = useState(false);
-  
+
   const router = useRouter();
 
   const data = [
@@ -57,27 +191,6 @@ const CustomerInfo = () => {
     'Model1415',
     'Model1617',
   ];
-
-  const handleSubmitd= () => {
-    if (customerName.trim() === '' ||
-     
-        address.trim() === '' ||
-         contactPerson.trim() === '' ||
-         email.trim() === '' 
-       
-      ) {
-         
-      setError('All fields are required!');
-    } else {
-      setError('');
-      router.push('/service_info');
-      setCustomerName('');
-      setAddress('');
-      setContactPerson('');
-      setEmail('');
-    
-    }
-  };
 
   const handleSearch = (text) => {
     setSearchQuery(text);
@@ -106,7 +219,7 @@ const CustomerInfo = () => {
   const handleSelectItem = (item) => {
     setSearchQuery(item);
     setFilteredData([]);
-    setIsCustomerSelected(true); // Show the model search box when a customer is selected
+    setIsCustomerSelected(true);
   };
 
   const handleSelectModelItem = (item) => {
@@ -115,32 +228,48 @@ const CustomerInfo = () => {
   };
 
   const handleSubmit = () => {
-    if (customerName.trim() === '') {
+              value={searchModelQuery}
+              value={searchModelQuery}
+    if ( searchQuery.trim() === ''||  searchModelQuery.trim() === '') {  
       setError('All fields are required!');
     } else {
       setError('');
       router.push('/service_info');
-      setCustomerName('');
-      setAddress('');
-      setContactPerson('');
-      setEmail('');
-      setSelectedOption('');
-      setSelectedOption2('');
-      setOtherCall('');
-      setModelNo('');
-      setSerialNo('');
-      setEquipmentName('');
+      // setCustomerName('');
+      // setAddress('');
+      // setContactPerson('');
+      // setEmail('');
       setSearchQuery('');
       setSearchModelQuery('');
       setFilteredData([]);
       setFilteredModelData([]);
-      setIsCustomerSelected(false); // Hide the model search box after submission
+      setIsCustomerSelected(false);
     }
   };
+  const handleSubmitd = () => {
+    // value={searchModelQuery}
+    // value={searchModelQuery}
+if (customerName.trim() === '' || address.trim() === '' || contactPerson.trim() === '' || email.trim() === '') {  
+//setError('All fields are required!');
+router.push('/service_info');
+} else {
+setErrord('');
+router.push('/service_info');
+setCustomerName('');
+setAddress('');
+setContactPerson('');
+setEmail('');
+//setSearchQuery('');
+//setSearchModelQuery('');
+//setFilteredData([]);
+//setFilteredModelData([]);
+//setIsCustomerSelected(false);
+}
+};
 
   return (
     <View style={styles.container}>
-      <Image 
+      <Image
         source={require('../../assets/images/logo.png')}
         style={styles.image}
       />
@@ -152,13 +281,10 @@ const CustomerInfo = () => {
         <TextInput
           variant="outlined"
           label="Search Customer..."
-          style={{ marginHorizontal: 10,marginTop:30,
-            
-           }}
+          style={styles.searchInput}
           value={searchQuery}
           onChangeText={handleSearch}
         />
-       
 
         {filteredData.length > 0 && (
           <FlatList
@@ -167,73 +293,33 @@ const CustomerInfo = () => {
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => handleSelectItem(item)}>
                 <Text style={styles.suggestionItem}>{item}</Text>
-              </TouchableOpacity >
+              </TouchableOpacity>
             )}
           />
         )}
 
-<>
-
-{filteredData.length === 0 && searchQuery.length > 0  &&  (
-          <Button 
+        {filteredData.length === 0 && searchQuery.length > 0 && (
+          <Button
             style={styles.dailogBtn}
             title="Add"
             onPress={() => setVisible(true)}
           />
         )}
-      
-      <Dialog style={{borderRadius: 20}} visible={visible} onDismiss={() => setVisible(false)}>
-      <ScrollView>
-        <DialogHeader title="         New Customer"style={{alignSelf:'center'}} />
-        {error ? <Text style={{alignSelf:'center',color: 'red',}} >{error}</Text> : null}
-        <DialogContent>
-          <Stack spacing={2}>
-           
-            <TextInput variant="outlined" label="Customer name" style={{ margin: 15}}
-      value={customerName}
-       onChangeText={setCustomerName} />
-        <TextInput variant="outlined" label="Address" style={{ margin: 15}} 
-         value={address}
-         onChangeText={setAddress} 
-  />
 
-        <TextInput variant="outlined" label="Contact person" style={{ margin: 15 }}
-         value={contactPerson}
-       onChangeText={setContactPerson}  />
-
-        <TextInput variant="outlined" label="Email" style={{ margin:15 }} 
-        value={email}
-       onChangeText={setEmail} 
-       
-       />
-       <Button
-       title="Save"
-       compact
-       variant="text"
-       onPress={handleSubmitd} />
-        
-     
-      
-             
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            title="Cancel"
-            compact
-            variant="text"
-            onPress={() => setVisible(false)}
-          />
-          <Button
-            title="Ok"
-            compact
-            variant="text"
-            onPress={() => setVisible(false)}
-          />
-        </DialogActions>
-       </ScrollView>
-      </Dialog>
-    </>
+        <AnimatedDialog
+          visible={visible}
+          onClose={() => setVisible(false)}
+          onSubmit={handleSubmit}
+          customerName={customerName}
+          setCustomerName={setCustomerName}
+          address={address}
+          setAddress={setAddress}
+          contactPerson={contactPerson}
+          setContactPerson={setContactPerson}
+          email={email}
+          setEmail={setEmail}
+          error={error}
+        />
 
         {/* Conditionally render the model search box */}
         {isCustomerSelected && (
@@ -241,7 +327,7 @@ const CustomerInfo = () => {
             <TextInput
               variant="outlined"
               label="Search Model..."
-              style={{ marginHorizontal: 10,marginTop:30 }}
+              style={styles.searchInput}
               value={searchModelQuery}
               onChangeText={handleModelSearch}
             />
@@ -253,19 +339,11 @@ const CustomerInfo = () => {
                   <TouchableOpacity onPress={() => handleSelectModelItem(item)}>
                     <Text style={styles.suggestionItem}>{item}</Text>
                   </TouchableOpacity>
-                  
                 )}
               />
             )}
           </>
         )}
-       
-     
-
-
-        
-        
-           
 
         <TouchableOpacity style={styles.customButton} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Save</Text>
@@ -278,19 +356,15 @@ const CustomerInfo = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-     padding: 5,
-     paddingTop: 30,
-     backgroundColor: '#f5f5f5',
-    
+    padding: 5,
+    paddingTop: 30,
+    backgroundColor: '#f5f5f5',
   },
-  dailogBtn:{
-    marginStart:255,
-    alignSelf:'flex-end',
-    marginEnd:10,
-   
-//marginHorizontal:,
+  dailogBtn: {
+    marginStart: 255,
+    alignSelf: 'flex-end',
+    marginEnd: 10,
   },
-
   suggestionItem: {
     padding: 10,
     borderBottomWidth: 1,
@@ -300,13 +374,13 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '40%',
-    height: 40,
+    height: 50,
     marginBottom: 15,
     marginTop: 20,
     alignSelf: 'center',
   },
   customButton: {
-    marginTop:20,
+    marginTop: 20,
     backgroundColor: 'black',
     paddingVertical: 10,
     paddingHorizontal: 20,
@@ -332,6 +406,7 @@ const styles = StyleSheet.create({
     height: 2,
     backgroundColor: 'black',
     marginVertical: 10,
+    marginBottom: 20,
   },
   logoHeading: {
     fontSize: 18,
@@ -342,11 +417,47 @@ const styles = StyleSheet.create({
   errorText: {
     color: 'red',
     marginBottom: 10,
+    
+  },
+  errorTextd: {
+    color: 'red',
+    marginBottom: 10,
+    alignSelf:'center'
+  },
+  searchInput: {
+    marginHorizontal: 10,
+    marginTop: 30,
+  },
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  dialogContainer: {
+    width: '80%',
+    padding: 20,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    elevation: 5,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+  },
+  dialogHeader: {
+    marginBottom: 15,
+  },
+  input:{
+marginTop: 3,
+
+
   },
 });
-const AppProvider  = () => (
+
+const AppProvider = () => (
   <Provider>
     <CustomerInfo />
   </Provider>
 );
+
 export default AppProvider;

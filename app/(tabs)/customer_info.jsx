@@ -35,6 +35,7 @@ const CustomerInfo = () => {
   const [filteredModelData, setFilteredModelData] = useState([]);
   const [isCustomerSelected, setIsCustomerSelected] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [isButtonVisible, setButtonVisible] = useState(false);
   
   const router = useRouter();
 
@@ -172,11 +173,15 @@ const CustomerInfo = () => {
         )}
 
 <>
-      <Button style={styles.dailogBtn}
-        title="New Customer"
-        //style={{ margin:60 }}
-        onPress={() => setVisible(true)}
-      />
+
+{filteredData.length === 0 && searchQuery.length > 0  &&  (
+          <Button 
+            style={styles.dailogBtn}
+            title="Add"
+            onPress={() => setVisible(true)}
+          />
+        )}
+      
       <Dialog style={{borderRadius: 20}} visible={visible} onDismiss={() => setVisible(false)}>
       <ScrollView>
         <DialogHeader title="         New Customer"style={{alignSelf:'center'}} />
@@ -301,16 +306,16 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   customButton: {
-    marginTop:10,
-    backgroundColor: '#4A4A4A',
+    marginTop:20,
+    backgroundColor: 'black',
     paddingVertical: 10,
-    paddingHorizontal: 25,
+    paddingHorizontal: 20,
+    marginHorizontal: 120,
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#2E2E2E',
+    borderWidth: 3,
+    borderColor: 'white',
     alignItems: 'center',
     marginBottom: 15,
-    marginHorizontal: 50,
     shadowColor: '#000000',
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.2,

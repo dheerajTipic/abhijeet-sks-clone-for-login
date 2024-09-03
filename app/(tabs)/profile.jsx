@@ -370,114 +370,244 @@
 // export default App;
 
 
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import {
+  View,
+  Animated,
+  Easing,
+  StyleSheet,
+  Modal,
+  Dimensions,
+} from "react-native";
 import {
   Provider,
   Stack,
   Button,
-  Dialog,
   DialogHeader,
   DialogContent,
   DialogActions,
   Text,
   TextInput,
 } from "@react-native-material/core";
-import Picker from "react-native-picker-select";
-import {  View } from "react-native-web";
+import { ScrollView } from 'react-native';
 import { router } from "expo-router";
-import { ScrollView} from 'react-native';
+
+const { height } = Dimensions.get('window');
+
+const AnimatedDialog = ({
+  visible,
+  onClose,
+  onSubmit,
+  customerName,
+  setCustomerName,
+  address,
+  setAddress,
+  contactPerson,
+  setContactPerson,
+  email,
+  setEmail,
+  error,
+}) => {
+  const [show, setShow] = useState(visible);
+  const scaleValue = useRef(new Animated.Value(0)).current;
+  const opacityValue = useRef(new Animated.Value(0)).current;
+  const translateYValue = useRef(new Animated.Value(height)).current;
+
+  useEffect(() => {
+    if (visible) {
+      setShow(true);
+      Animated.parallel([
+        Animated.timing(scaleValue, {
+          toValue: 1,
+          duration: 300,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }).start(),
+        Animated.timing(opacityValue, {
+          toValue: 1,
+          duration: 300,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }).start(),
+        Animated.timing(translateYValue, {
+          toValue: 0,
+          duration: 300,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }).start(),
+      ]);
+    } else {
+      Animated.parallel([
+        Animated.timing(scaleValue, {
+          toValue: 0,
+          duration: 300,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }).start(),
+        Animated.timing(opacityValue, {
+          toValue: 0,
+          duration: 300,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }).start(),
+        Animated.timing(translateYValue, {
+          toValue: height,
+          duration: 300,
+          easing: Easing.out(Easing.ease),
+          useNativeDriver: true,
+        }).start(() => setShow(false)),
+      ]);
+    }
+  }, [visible]);
+
+  return (
+    <Modal transparent visible={show} animationType="none">
+      <View style={styles.overlay}>
+        <Animated.View
+          style={[
+            styles.dialogContainer,
+            {
+              transform: [
+                { scale: scaleValue },
+                { translateY: translateYValue },
+              ],
+              opacity: opacityValue,
+            },
+          ]}
+        >
+          <ScrollView contentContainerStyle={styles.scrollContainer}>
+            <DialogHeader title="New Customer" style={{ alignSelf: 'center' }} />
+            {error ? <Text style={{ alignSelf: 'center', color: 'red' }}>{error}</Text> : null}
+            <DialogContent>
+              <Stack spacing={2}>
+                <TextInput
+                  variant="outlined"
+                  label="Customer name"
+                  style={{width:300}}
+                  value={customerName}
+                  onChangeText={setCustomerName}
+                />
+                <TextInput
+                  variant="outlined"
+                  label="Address"
+                  style={{ margin: 0 }}
+                  value={address}
+                  onChangeText={setAddress}
+                />
+                <TextInput
+                  variant="outlined"
+                  label="Contact person"
+                  style={{ margin: 0 }}
+                  value={contactPerson}
+                  onChangeText={setContactPerson}
+                />
+                <TextInput
+                  variant="outlined"
+                  label="Email"
+                  style={{ margin: 0 }}
+                  value={email}
+                  onChangeText={setEmail}
+                />
+                <Button
+                  title="Save"
+                  compact
+                  variant="text"
+                  onPress={onSubmit}
+                />
+              </Stack>
+            </DialogContent>
+            <DialogActions>
+              <Button
+                title="Cancel"
+                compact
+                variant="text"
+                onPress={onClose}
+              />
+              <Button
+                title="Ok"
+                compact
+                variant="text"
+                onPress={onClose}
+              />
+            </DialogActions>
+          </ScrollView>
+        </Animated.View>
+      </View>
+    </Modal>
+  );
+};
+
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+  dialogContainer: {
+    width:350,
+    height: 600,
+   // padding: 10,
+    backgroundColor: 'white',
+    borderRadius: 20,
+    alignItems: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  scrollContainer: {
+    flexGrow: 1,
+    justifyContent: 'center',
+  },
+});
 
 const App = () => {
   const [visible, setVisible] = useState(false);
   const [customerName, setCustomerName] = useState('');
   const [address, setAddress] = useState('');
-    const [contactPerson, setContactPerson] = useState('');
-     const [email, setEmail] = useState('');
-     const [otherCall, setOtherCall] = useState('');
-     const [selectedOption, setSelectedOption] = useState('');
- const [selectedOption2, setSelectedOption2] = useState('');
- const [error, setError] = useState('');
+  const [contactPerson, setContactPerson] = useState('');
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState('');
 
- const handleSubmit = () => {
-      if (customerName.trim() === '' ||
-       
-          address.trim() === '' ||
-           contactPerson.trim() === '' ||
-           email.trim() === '' 
-         
-        ) {
-           
-        setError('All fields are required!');
-      } else {
-        setError('');
-        router.push('/service_info');
-        setCustomerName('');
-        setAddress('');
-        setContactPerson('');
-        setEmail('');
-      
-      }
-    };
-
+  const handleSubmit = () => {
+    if (customerName.trim() === '' ||
+      address.trim() === '' ||
+      contactPerson.trim() === '' ||
+      email.trim() === '') {
+      setError('All fields are required!');
+    } else {
+      setError('');
+      router.push('/service_info');
+      setCustomerName('');
+      setAddress('');
+      setContactPerson('');
+      setEmail('');
+    }
+  };
 
   return (
     <>
       <Button
         title="New Customer"
-        style={{ margin:60 }}
+        style={{ margin: 60 }}
         onPress={() => setVisible(true)}
       />
-      <Dialog style={{borderRadius: 20}} visible={visible} onDismiss={() => setVisible(false)}>
-      <ScrollView>
-        <DialogHeader title="         New Customer"style={{alignSelf:'center'}} />
-        {error ? <Text style={{alignSelf:'center',color: 'red',}} >{error}</Text> : null}
-        <DialogContent>
-          <Stack spacing={2}>
-           
-            <TextInput variant="outlined" label="Customer name" style={{ margin: 15}}
-      value={customerName}
-       onChangeText={setCustomerName} />
-        <TextInput variant="outlined" label="Address" style={{ margin: 15}} 
-         value={address}
-         onChangeText={setAddress} 
-  />
-
-        <TextInput variant="outlined" label="Contact person" style={{ margin: 15 }}
-         value={contactPerson}
-       onChangeText={setContactPerson}  />
-
-        <TextInput variant="outlined" label="Email" style={{ margin:15 }} 
-        value={email}
-       onChangeText={setEmail} 
-       
-       />
-       <Button
-       title="Save"
-       compact
-       variant="text"
-       onPress={handleSubmit} />
-        
-     
-      
-             
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button
-            title="Cancel"
-            compact
-            variant="text"
-            onPress={() => setVisible(false)}
-          />
-          <Button
-            title="Ok"
-            compact
-            variant="text"
-            onPress={() => setVisible(false)}
-          />
-        </DialogActions>
-       </ScrollView>
-      </Dialog>
+      <AnimatedDialog
+        visible={visible}
+        onClose={() => setVisible(false)}
+        onSubmit={handleSubmit}
+        customerName={customerName}
+        setCustomerName={setCustomerName}
+        address={address}
+        setAddress={setAddress}
+        contactPerson={contactPerson}
+        setContactPerson={setContactPerson}
+        email={email}
+        setEmail={setEmail}
+        error={error}
+      />
     </>
   );
 };

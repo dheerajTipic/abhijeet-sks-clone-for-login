@@ -170,6 +170,8 @@ const CustomerInfo = () => {
   const [filteredModelData, setFilteredModelData] = useState([]);
   const [isCustomerSelected, setIsCustomerSelected] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [serialNo, setserialNo] = useState();
+  const [equipmentName, setequipmentName] = useState();
 
   const router = useRouter();
 
@@ -230,7 +232,7 @@ const CustomerInfo = () => {
   const handleSubmit = () => {
               value={searchModelQuery}
               value={searchModelQuery}
-    if ( searchQuery.trim() === ''||  searchModelQuery.trim() === '') {  
+    if ( searchQuery.trim() === ''||  searchModelQuery.trim() === ''||serialNo.trim() === ''||equipmentName.trim() === '') {  
       setError('All fields are required!');
     } else {
       setError('');
@@ -243,6 +245,8 @@ const CustomerInfo = () => {
       setSearchModelQuery('');
       setFilteredData([]);
       setFilteredModelData([]);
+      setserialNo('');
+      setserialNo('')
       setIsCustomerSelected(false);
     }
   };
@@ -344,6 +348,23 @@ setEmail('');
             )}
           </>
         )}
+
+<TextInput
+          variant="outlined"
+          label="Serial No:"
+          style={styles.searchInput}
+         // value={searchQuery}
+          value ={serialNo}
+          onChangeText={handleSearch}
+        />
+        <TextInput
+          variant="outlined"
+          label="Equipment Name:"
+          style={styles.searchInput}
+         // value={searchQuery}
+          value ={serialNo}
+          onChangeText={handleSearch}
+        />
 
         <TouchableOpacity style={styles.customButton} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Save</Text>

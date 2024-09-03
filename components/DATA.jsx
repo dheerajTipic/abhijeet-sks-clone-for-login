@@ -722,7 +722,7 @@ const CustomerInfo = () => {
        </ScrollView>
       </Dialog>
     </>
-
+{/* =======================================dailog================================================================ */}
         {/* Conditionally render the model search box */}
         {isCustomerSelected && (
           <>

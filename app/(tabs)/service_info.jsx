@@ -45,7 +45,7 @@ const Serviceinfo = () => {
        multiline
      maxLength={200} 
        />
-        <TextInput variant="outlined" label="Actual foult" style={{ margin: 12}}
+        <TextInput variant="outlined" label="Actual fault" style={{ margin: 12}}
        value={actualFault}
        onChangeText={setActualFault}
        multiline
@@ -66,7 +66,7 @@ const Serviceinfo = () => {
             <Picker.Item label="Select Remark" value="optiona1" />
             <Picker.Item label="Working Fully" value="optiona2" />
             <Picker.Item label="Working Moderately" value="optiona3" />
-            <Picker.Item label="Working" value="optiona4" />
+            <Picker.Item label=" Not Working" value="optiona4" />
             
           </Picker>
       

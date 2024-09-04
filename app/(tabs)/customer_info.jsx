@@ -2,7 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, FlatList, Animated, Easing, Modal } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Provider, Stack, Button, DialogHeader, DialogContent, DialogActions, TextInput } from "@react-native-material/core";
-
+//......................................................Dailog
 const AnimatedDialog = ({ visible, onClose, onSubmit, customerName, setCustomerName, address, setAddress, contactPerson, setContactPerson, email, setEmail, error }) => {
   const [show, setShow] = useState(visible);
   const scaleValue = useRef(new Animated.Value(0)).current;
@@ -137,18 +137,19 @@ setEmail('');
               </Stack>
             </DialogContent>
             <DialogActions>
-              {/* <Button
+              <Button 
                 title="Cancel"
-                compact
+                compact 
                 variant="text"
                 onPress={onClose}
-              /> */}
-              <Button
+                style={{color:'red'}}
+              />
+              {/* <Button
                 title="Ok"
                 compact
                 variant="text"
                 onPress={onClose}
-              />
+              /> */}
             </DialogActions>
           </ScrollView>
         </Animated.View>
@@ -156,22 +157,33 @@ setEmail('');
     </Modal>
   );
 };
-
+//......................................................Dailog End
 const CustomerInfo = () => {
   const [customerName, setCustomerName] = useState('');
   const [address, setAddress] = useState('');
   const [contactPerson, setContactPerson] = useState('');
+ // const [equipmentName, setequipmentName] = useState();
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
+  
+  
   const [errord, setErrord] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchModelQuery, setSearchModelQuery] = useState('');
+  const [searchEqpQuery, setSearchEqpQuery] = useState('');
+ 
   const [filteredData, setFilteredData] = useState([]);
   const [filteredModelData, setFilteredModelData] = useState([]);
+  const [filteredEqpData, setFilteredEqpData] = useState([]);
+  
+
   const [isCustomerSelected, setIsCustomerSelected] = useState(false);
+  const [isEqpSelected, setIsEqpSelected] = useState(false);
+ 
+ 
   const [visible, setVisible] = useState(false);
   const [serialNo, setserialNo] = useState();
-  const [equipmentName, setequipmentName] = useState();
+ 
 
   const router = useRouter();
 
@@ -184,6 +196,16 @@ const CustomerInfo = () => {
     'PureVeg Hotel',
     'NonVeg Hotel',
   ];
+  const eqpData =[
+    // bajaj=[m1,m2,m3],
+    // tata=[t1,t2,t3],
+    // Honda=[h1,h2,h3],
+    'Bajaa',
+    'Tata',
+    'aaa'
+
+  
+  ];
 
   const modelData = [
     'Model1234',
@@ -193,6 +215,8 @@ const CustomerInfo = () => {
     'Model1415',
     'Model1617',
   ];
+ 
+  
 
   const handleSearch = (text) => {
     setSearchQuery(text);
@@ -203,6 +227,18 @@ const CustomerInfo = () => {
       setFilteredData(results);
     } else {
       setFilteredData([]);
+    }
+  };
+
+  const handleEqpSearch = (text) => {
+    setSearchEqpQuery(text);
+    if (text) {
+      const results = eqpData.filter((item) =>
+        item.toLowerCase().includes(text.toLowerCase())
+      );
+      setFilteredEqpData(results);
+    } else {
+      setFilteredEqpData([]);
     }
   };
 
@@ -218,6 +254,9 @@ const CustomerInfo = () => {
     }
   };
 
+  
+ 
+
   const handleSelectItem = (item) => {
     setSearchQuery(item);
     setFilteredData([]);
@@ -228,49 +267,37 @@ const CustomerInfo = () => {
     setSearchModelQuery(item);
     setFilteredModelData([]);
   };
+  const handleSelectEqpItem = (item) => {
+    setSearchEqpQuery(item);
+    setFilteredEqpData([]);
+    setIsEqpSelected(true);
+  };
+  
 
   const handleSubmit = () => {
-              value={searchModelQuery}
-              value={searchModelQuery}
-    if ( searchQuery.trim() === ''||  searchModelQuery.trim() === ''||serialNo.trim() === ''||equipmentName.trim() === '') {  
+              // value={searchModelQuery}
+              // value={searchModelQuery}
+    if ( searchQuery.trim() === ''||  searchModelQuery.trim() === ''|| searchEqpQuery.trim() === '') {  
       setError('All fields are required!');
     } else {
       setError('');
       router.push('/service_info');
-      // setCustomerName('');
-      // setAddress('');
-      // setContactPerson('');
-      // setEmail('');
+      
       setSearchQuery('');
       setSearchModelQuery('');
+      setSearchEqpQuery('');
+     
       setFilteredData([]);
       setFilteredModelData([]);
-      setserialNo('');
-      setserialNo('')
+      setFilteredEqpData([]);
+     
+      
       setIsCustomerSelected(false);
+      setIsEqpSelected(false);
+      
     }
   };
-  const handleSubmitd = () => {
-    // value={searchModelQuery}
-    // value={searchModelQuery}
-if (customerName.trim() === '' || address.trim() === '' || contactPerson.trim() === '' || email.trim() === '') {  
-//setError('All fields are required!');
-router.push('/service_info');
-} else {
-setErrord('');
-router.push('/service_info');
-setCustomerName('');
-setAddress('');
-setContactPerson('');
-setEmail('');
-//setSearchQuery('');
-//setSearchModelQuery('');
-//setFilteredData([]);
-//setFilteredModelData([]);
-//setIsCustomerSelected(false);
-}
-};
-
+ 
   return (
     <View style={styles.container}>
       <Image
@@ -325,8 +352,34 @@ setEmail('');
           error={error}
         />
 
+        
         {/* Conditionally render the model search box */}
         {isCustomerSelected && (
+          <>
+            <TextInput
+              variant="outlined"
+              label=" Search Equipment..."
+              style={styles.searchInput}
+              value={searchEqpQuery}
+              onChangeText={handleEqpSearch}
+            />
+            {filteredEqpData.length > 0 && (
+              <FlatList
+                data={filteredEqpData}
+                keyExtractor={(item) => item}
+                renderItem={({ item }) => (
+                  <TouchableOpacity onPress={() => handleSelectEqpItem(item)}>
+                    <Text style={styles.suggestionItem}>{item}</Text>
+                  </TouchableOpacity>
+                )}
+              />
+
+            )}
+
+          </>
+        )}
+         {isEqpSelected &&
+          (
           <>
             <TextInput
               variant="outlined"
@@ -345,27 +398,21 @@ setEmail('');
                   </TouchableOpacity>
                 )}
               />
+
             )}
-<TextInput
+
+          </>
+        )}
+
+
+{/* <TextInput
           variant="outlined"
           label="Serial No:"
           style={styles.searchInput}
          // value={searchQuery}
           value ={serialNo}
-          onChangeText={handleSearch}
-        />
-
-<TextInput
-          variant="outlined"
-          label="Equipment Name:"
-          style={styles.searchInput}
-         // value={searchQuery}
-          value ={serialNo}
-          onChangeText={handleSearch}
-        />
-          </>
-        )}
-
+          onChangeText={setserialNo}
+        /> */}
 
         
 
@@ -382,7 +429,8 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 5,
     paddingTop: 30,
-    backgroundColor: '#f5f5f5',
+   backgroundColor: '#f5f5f5',
+  
   },
   dailogBtn: {
     marginStart: 255,

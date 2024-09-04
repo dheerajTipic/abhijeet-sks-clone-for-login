@@ -23,11 +23,7 @@ setCustomerName('');
 setAddress('');
 setContactPerson('');
 setEmail('');
-//setSearchQuery('');
-//setSearchModelQuery('');
-//setFilteredData([]);
-//setFilteredModelData([]);
-//setIsCustomerSelected(false);
+
 }
 };
 
@@ -127,23 +123,36 @@ setEmail('');
                   value={email}
                   onChangeText={setEmail}
                 />
-                <Button
+                {/* <Button
                   title="Save"
                   compact
-                  style={{marginTop:10, borderBottomWidth:2}}
+                  style={{marginHorizontal:30, borderWidth:2 ,backgroundColor:'black'}}
                   variant="text"
                   onPress={handleSubmitd}
-                />
+                /> */}
+<View style={{display:"flex",alignItems:'center', justifyContent:'space-between',flexDirection:'row',width:"100%", marginTop:8,
+
+}}>
+<TouchableOpacity style={styles.customButtond} onPress={handleSubmitd}>
+          <Text style={styles.buttonTextd}>Save</Text>
+        </TouchableOpacity>
+             
+        <TouchableOpacity style={styles.customButtoncancel} onPress={onClose}>
+          <Text style={styles.buttonTextcancle}>Cancel</Text>
+        </TouchableOpacity>
+        </View>
               </Stack>
             </DialogContent>
             <DialogActions>
-              <Button 
+              {/* <Button 
                 title="Cancel"
                 compact 
                 variant="text"
                 onPress={onClose}
                 style={{color:'red'}}
-              />
+              /> */}
+
+
               {/* <Button
                 title="Ok"
                 compact
@@ -200,9 +209,7 @@ const CustomerInfo = () => {
     'NonVeg Hotel',
   ];
   const eqpData =[
-    // bajaj=[m1,m2,m3],
-    // tata=[t1,t2,t3],
-    // Honda=[h1,h2,h3],
+    
     'Bajaa',
     'Tata',
     'aaa'
@@ -504,7 +511,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 120,
     borderRadius: 12,
     borderWidth: 3,
-    borderColor: 'white',
+    borderColor: 'black',
     alignItems: 'center',
     marginBottom: 15,
     shadowColor: '#000000',
@@ -513,6 +520,7 @@ const styles = StyleSheet.create({
     shadowRadius: 15,
     elevation: 5,
   },
+  
   buttonText: {
     color: '#fff',
     fontSize: 16,
@@ -553,7 +561,7 @@ const styles = StyleSheet.create({
   },
   dialogContainer: {
     width: '80%',
-    padding: 20,
+    padding: 10,
     backgroundColor: 'white',
     borderRadius: 20,
     elevation: 5,
@@ -565,9 +573,58 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   input:{
-marginTop: 3,
+marginTop: 5
+,
 
 
+  },
+  customButtond:{
+    marginTop: 10,
+    //marginRight:50,
+    backgroundColor: 'green',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+   // marginHorizontal: 20,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'black',
+    alignItems: 'center',
+    marginBottom: 15,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 10,
+    elevation: 5,
+    width:80,
+  },
+  customButtoncancel:{
+    marginTop: 10,
+   // marginLeft:2,
+    backgroundColor: '#BF0000',
+    paddingVertical: 10,
+    paddingHorizontal: 13,
+    //marginHorizontal: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    alignItems: 'center',
+    marginBottom: 15,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 5,
+    width:80,
+  },
+  buttonTextd: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  buttonTextcancle: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

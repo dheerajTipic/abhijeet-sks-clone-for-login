@@ -171,14 +171,17 @@ const CustomerInfo = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchModelQuery, setSearchModelQuery] = useState('');
   const [searchEqpQuery, setSearchEqpQuery] = useState('');
+  const [searchsnoQuery, setSearchsnoQuery] = useState('');
  
   const [filteredData, setFilteredData] = useState([]);
   const [filteredModelData, setFilteredModelData] = useState([]);
   const [filteredEqpData, setFilteredEqpData] = useState([]);
+  const [filteredsnoData, setFilteredsnoData] = useState([]);
   
 
   const [isCustomerSelected, setIsCustomerSelected] = useState(false);
   const [isEqpSelected, setIsEqpSelected] = useState(false);
+  const [issnoSelected, setIssnoSelected] = useState(false);
  
  
   const [visible, setVisible] = useState(false);
@@ -214,6 +217,14 @@ const CustomerInfo = () => {
     'Model1213',
     'Model1415',
     'Model1617',
+  ];
+  const snoData = [
+    '1234',
+    '5678',
+    '91011',
+    '1213',
+    '1415',
+    'M617',
   ];
  
   
@@ -253,6 +264,17 @@ const CustomerInfo = () => {
       setFilteredModelData([]);
     }
   };
+  const handlesnoSearch = (text) => {
+    setSearchsnoQuery(text);
+    if (text) {
+      const results = snoData.filter((item) =>
+        item.toLowerCase().includes(text.toLowerCase())
+      );
+      setFilteredsnoData(results);
+    } else {
+      setFilteredsnoData([]);
+    }
+  };
 
   
  
@@ -272,6 +294,11 @@ const CustomerInfo = () => {
     setFilteredEqpData([]);
     setIsEqpSelected(true);
   };
+  const handleSelectsnoItem = (item) => {
+    setSearchsnoQuery(item);
+    setFilteredsnoData([]);
+    setIssnoSelected(true);
+  };
   
 
   const handleSubmit = () => {
@@ -286,14 +313,17 @@ const CustomerInfo = () => {
       setSearchQuery('');
       setSearchModelQuery('');
       setSearchEqpQuery('');
+      setSearchsnoQuery('');
      
       setFilteredData([]);
       setFilteredModelData([]);
       setFilteredEqpData([]);
+      setFilteredsnoData([]);
      
       
       setIsCustomerSelected(false);
       setIsEqpSelected(false);
+      setIssnoSelected(false);
       
     }
   };
@@ -404,17 +434,32 @@ const CustomerInfo = () => {
           </>
         )}
 
-
-{/* <TextInput
+{isEqpSelected &&
+          (
+          <>
+          <TextInput
           variant="outlined"
-          label="Serial No:"
+          label=" Search Serial No.."
           style={styles.searchInput}
          // value={searchQuery}
-          value ={serialNo}
-          onChangeText={setserialNo}
-        /> */}
+          value ={searchsnoQuery}
+          onChangeText={handlesnoSearch}
+        />
+            {filteredsnoData.length > 0 && (
+              <FlatList
+                data={filteredsnoData}
+                keyExtractor={(item) => item}
+                renderItem={({ item }) => (
+                  <TouchableOpacity onPress={() => handleSelectsnoItem(item)}>
+                    <Text style={styles.suggestionItem}>{item}</Text>
+                  </TouchableOpacity>
+                )}
+              />
 
-        
+            )}
+
+          </>
+        )}
 
         <TouchableOpacity style={styles.customButton} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Save</Text>

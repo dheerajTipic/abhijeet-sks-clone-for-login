@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from 'rea
 import { TextInput } from '@react-native-material/core';
 import { Picker } from '@react-native-picker/picker';
 import { router } from 'expo-router';
-import AdvancedTable from './profile';
+import AddTable from '../../components/addItem';
 
 const Serviceinfo = () => {
   const [visit, setVisit] = useState('');
@@ -86,7 +86,7 @@ const Serviceinfo = () => {
         </View>
         {isVisible && (
           <View>
-            <AdvancedTable />
+            <AddTable/>
             <TouchableOpacity style={styles.customButton} onPress={handlecancel}>
             <Text style={styles.buttonText}>close</Text>
           </TouchableOpacity>

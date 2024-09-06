@@ -72,20 +72,31 @@ const Serviceinfo = () => {
             <Picker.Item label="Working Moderately" value="optiona3" />
             <Picker.Item label="Not Working" value="optiona4" />
           </Picker>
-
-          <TouchableOpacity style={styles.customButton} onPress={handleAddItem}>
+<View style={{display:"flex",alignItems:'center', justifyContent:'space-between',flexDirection:'row',width:"100%", marginTop:8,marginStart:'10'}}>
+<TouchableOpacity style={styles.customButtona} onPress={handleAddItem}>
+            <Text style={styles.buttonText}>Add Item</Text>
+          </TouchableOpacity>
+         
+          <TouchableOpacity style={styles.customButtons} onPress={handleSubmit}>
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity>
+          
+  
+</View>
+          {/* <TouchableOpacity style={styles.customButton} onPress={handleAddItem}>
             <Text style={styles.buttonText}>Add Item</Text>
           </TouchableOpacity>
          
           <TouchableOpacity style={styles.customButton} onPress={handleSubmit}>
             <Text style={styles.buttonText}>Save</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           
           
 
         </View>
         {isVisible && (
           <View>
+            <View style={{height:2,width:'85%',backgroundColor:'black',alignSelf:'center'}}></View>
             <AddTable/>
             <TouchableOpacity style={styles.customButton} onPress={handlecancel}>
             <Text style={styles.buttonText}>close</Text>
@@ -156,6 +167,43 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginHorizontal: 120,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'black',
+    alignItems: 'center',
+    marginBottom: 15,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 5,
+  },
+  customButtons: {
+    marginTop: 20,
+    marginLeft:35,
+    backgroundColor: 'black',
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    marginHorizontal: 120,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'black',
+    alignItems: 'center',
+    marginBottom: 15,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 5,
+    marginleft: 20,
+  },
+  customButtona: {
+    marginRight: 10,
+    marginTop:20,
+    backgroundColor: 'black',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginHorizontal: 70,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: 'black',

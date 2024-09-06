@@ -7,8 +7,8 @@ const AddTable = () => {
   const [filterText, setFilterText] = useState('');
   
   const [items, setItems] = useState([
-    { id: '1', name: 'Item 1', quantity: 10, price: 100 },
-    { id: '2', name: 'Item 2', quantity: 20, price: 200 },
+     { id: '1', name: 'sam', quantity: 10, price: 100 },
+     { id: '2', name: 'sagar', quantity: 20, price: 200 },
     // More items...
   ]);
 
@@ -43,7 +43,7 @@ const AddTable = () => {
     <View style={styles.container}>
       {/* Filter Input */}
       <RNMaterialTextInput
-        label="Filter by equpment name"
+        label="Filter by Equipment name"
         value={filterText}
         onChangeText={setFilterText}
         style={styles.filterInput}
@@ -68,7 +68,7 @@ const AddTable = () => {
       {/* Add Item Form */}
       <View style={styles.form}>
         <RNMaterialTextInput
-          label=" Equipment Name"
+          label=" Item"
           value={newItem.name}
           onChangeText={text => setNewItem({ ...newItem, name: text })}
           style={styles.input}

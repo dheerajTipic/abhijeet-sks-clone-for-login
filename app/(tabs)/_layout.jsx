@@ -20,7 +20,7 @@ export default function Tablayout() {
    
     <Tabs.Screen name ='customer_info'
      options={{
-        tabBarLabel:'CustomerInfo',
+        tabBarLabel:'ServiceInfo',
         tabBarIcon:({color} )=><Ionicons name="person-circle-sharp" size={24} color={color} />
 
     }}

@@ -1835,3 +1835,247 @@ const AdvancedTable = () => {
     </View>
   );
 };
+
+
+
+
+import React, { useState, useRef } from 'react';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Animated } from 'react-native';
+
+const Profile = () => {
+  const [modalVisible, setModalVisible] = useState({ total: false, complete: false, pending: false, options: false });
+  const [fadeAnim] = useState(new Animated.Value(0)); // Initial opacity for animation
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 }); // State to hold the modal position
+
+  // Create refs for each card using createRef
+  const totalCardRef = useRef(null);
+  const completeCardRef = useRef(null);
+  const pendingCardRef = useRef(null);
+
+  const openModal = (type) => {
+    let ref;
+
+    // Set ref according to the card type
+    if (type === 'total') ref = totalCardRef;
+    if (type === 'complete') ref = completeCardRef;
+    if (type === 'pending') ref = pendingCardRef;
+
+    ref.current.measure((fx, fy, width, height, px, py) => {
+      setModalPosition({ x: px, y: py - height }); // Position above the card
+      setModalVisible((prev) => ({ ...prev, [type]: true }));
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    });
+  };
+
+  const closeModal = (type) => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      setModalVisible((prev) => ({ ...prev, [type]: false }));
+    });
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.profileContainer}>
+        <Image
+          source={require('../../assets/images/Person.png')} // Replace with your image path
+          style={styles.profileImage}
+        />
+        <Text style={styles.profileName}>John Doe</Text>
+      </View>
+
+      <View style={styles.cardContainer}>
+        {/* Card for Total */}
+        <TouchableOpacity
+          ref={totalCardRef}
+          style={styles.card}
+          onPress={() => openModal('total')}
+        >
+          <Text style={styles.cardTitle}>Total</Text>
+          <Text style={styles.cardContent}>5</Text>
+        </TouchableOpacity>
+
+        {/* Card for Complete */}
+        <TouchableOpacity
+          ref={completeCardRef}
+          style={styles.card}
+          onPress={() => openModal('complete')}
+        >
+          <Text style={styles.cardTitle}>Complete</Text>
+          <Text style={styles.cardContent}>3</Text>
+        </TouchableOpacity>
+
+        {/* Card for Pending */}
+        <TouchableOpacity
+          ref={pendingCardRef}
+          style={styles.card}
+          onPress={() => openModal('pending')}
+        >
+          <Text style={styles.cardTitle}>Pending</Text>
+          <Text style={styles.cardContent}>2</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Trigger Button for Options Modal */}
+      <TouchableOpacity style={styles.optionButton} onPress={() => openModal('options')}>
+        <Text style={styles.optionButtonText}>Options</Text>
+      </TouchableOpacity>
+
+      {/* Modal for Total */}
+      <Modal
+        transparent={true}
+        visible={modalVisible.total}
+        onRequestClose={() => closeModal('total')}
+        animationType="none"
+      >
+        <View style={[styles.modalBackground, { top: modalPosition.y, left: modalPosition.x }]}>
+          <Animated.View style={[styles.modalContainer, { opacity: fadeAnim }]}>
+            <Text style={styles.modalTitle}>Total Details</Text>
+            <Text style={styles.modalContent}>You have 5 total tasks.</Text>
+            <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('total')}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      </Modal>
+
+      {/* Modal for Complete */}
+      <Modal
+        transparent={true}
+        visible={modalVisible.complete}
+        onRequestClose={() => closeModal('complete')}
+        animationType="none"
+      >
+        <View style={[styles.modalBackground, { top: modalPosition.y, left: modalPosition.x }]}>
+          <Animated.View style={[styles.modalContainer, { opacity: fadeAnim }]}>
+            <Text style={styles.modalTitle}>Complete Details</Text>
+            <Text style={styles.modalContent}>You have completed 3 tasks.</Text>
+            <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('complete')}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      </Modal>
+
+      {/* Modal for Pending */}
+      <Modal
+        transparent={true}
+        visible={modalVisible.pending}
+        onRequestClose={() => closeModal('pending')}
+        animationType="none"
+      >
+        <View style={[styles.modalBackground, { top: modalPosition.y, left: modalPosition.x }]}>
+          <Animated.View style={[styles.modalContainer, { opacity: fadeAnim }]}>
+            <Text style={styles.modalTitle}>Pending Details</Text>
+            <Text style={styles.modalContent}>You have 2 pending tasks.</Text>
+            <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('pending')}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      </Modal>
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5,
+  },
+  profileContainer: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 30,
+  },
+  profileName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  cardContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    flexWrap: 'wrap',
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 10,
+    marginHorizontal: 5,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    flex: 1,
+    maxWidth: 300,
+    height: 150,
+  },
+  cardTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+    marginBottom: 10,
+  },
+  cardContent: {
+    fontSize: 50,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+  },
+  optionButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#007BFF',
+    borderRadius: 8,
+  },
+  optionButtonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  modalBackground: {
+    position: 'absolute',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: 300,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  modalContent: {
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  closeButton: {
+    marginTop: 15,
+  },
+  closeButtonText: {
+    color: '#FF0000',
+    fontSize: 16,
+  },
+});
+
+export default Profile;
+

@@ -2,6 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, FlatList, Animated, Easing, Modal } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Provider, Stack, Button, DialogHeader, DialogContent, DialogActions, TextInput } from "@react-native-material/core";
+import { Picker } from '@react-native-picker/picker';
+import { router } from 'expo-router';
+import AddTable from '../../components/addItem';
 //......................................................Dailog
 const AnimatedDialog = ({ visible, onClose, onSubmit, customerName, setCustomerName, address, setAddress, contactPerson, setContactPerson, email, setEmail, error }) => {
   const [show, setShow] = useState(visible);
@@ -18,7 +21,7 @@ setErrord('All fields are required!');
 
 } else {
 setErrord('');
-router.push('/service_info');
+router.push('/service_info'); 
 setCustomerName('');
 setAddress('');
 setContactPerson('');
@@ -75,7 +78,7 @@ setEmail('');
   }, [visible]);
 
   return (
-    <Modal transparent visible={show} animationType="none">
+<Modal transparent visible={show} animationType="none">
       <View style={styles.overlay}>
         <Animated.View
           style={[
@@ -172,12 +175,20 @@ const CustomerInfo = () => {
   const [address, setAddress] = useState('');
   const [contactPerson, setContactPerson] = useState('');
  // const [equipmentName, setequipmentName] = useState();
+
+ const [visit, setVisit] = useState('');
+ const [actualFault, setActualFault] = useState('');
+ const [actionteken, setActionTeken] = useState('');
+ const [selectedOptionremark, setSelectedOptionremark] = useState('');
+ const [selectedOptionType, setSelectedOptionType] = useState('');
+ const [selectedOptionLocation, setSelectedOptionLocation] = useState('');
+ const [isVisible, setIsVisible] = useState(false);
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
   
   
   const [errord, setErrord] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');//constomer
   const [searchModelQuery, setSearchModelQuery] = useState('');
   const [searchEqpQuery, setSearchEqpQuery] = useState('');
   const [searchsnoQuery, setSearchsnoQuery] = useState('');
@@ -198,6 +209,9 @@ const CustomerInfo = () => {
  
 
   const router = useRouter();
+  const [otherCall, setOtherCall] = useState('');
+  const [otherLocation, setOtherLocation] = useState('');
+ // const [otherCall, setOtherCall] = useState('');
 
   const data = [
     'Hayat Hotel',
@@ -210,9 +224,10 @@ const CustomerInfo = () => {
   ];
   const eqpData =[
     
-    'Bajaa',
+    'Bajaj',
     'Tata',
-    'aaa'
+    'aaa',
+    'demo1',
 
   
   ];
@@ -306,6 +321,17 @@ const CustomerInfo = () => {
     setFilteredsnoData([]);
     setIssnoSelected(true);
   };
+
+  // const handleSubmits = () => {
+  //   router.push('/profile');
+  // };
+  const handleAddItem = () => {
+    setIsVisible(true); // Show the table when the button is clicked
+  };
+  const handlecancel= () => {
+    setIsVisible(false); // Show the table when the button is clicked
+  };
+
   
 
   const handleSubmit = () => {
@@ -315,7 +341,7 @@ const CustomerInfo = () => {
       setError('All fields are required!');
     } else {
       setError('');
-      router.push('/service_info');
+      router.push('/profile');
       
       setSearchQuery('');
       setSearchModelQuery('');
@@ -350,7 +376,7 @@ const CustomerInfo = () => {
           variant="outlined"
           label="Search Customer..."
           style={styles.searchInput}
-          value={searchQuery}
+          value={searchQuery} 
           onChangeText={handleSearch}
         />
 
@@ -468,6 +494,131 @@ const CustomerInfo = () => {
           </>
         )}
 
+
+
+{issnoSelected &&
+          (
+          <>
+                     <Picker
+            selectedValue={selectedOptionType}
+            style={styles.picker}
+            onValueChange={(itemValue) => setSelectedOptionType(itemValue)}
+          >
+            <Picker.Item label="Select Type of Call" value="option1" />
+            <Picker.Item label="Breakdown" value="option2" />
+            <Picker.Item label="PPM" value="option3" />
+            <Picker.Item label="Installation" value="option4" />
+            <Picker.Item label="Inspection" value="option5" />
+            <Picker.Item label="Other" value="option6" />
+          </Picker>
+
+          {selectedOptionType === 'option6' && (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Type of call"
+              value={otherCall}
+              onChangeText={setOtherCall}
+            />
+          )}
+
+<Picker
+            selectedValue={selectedOptionLocation}
+            style={styles.picker}
+            onValueChange={(itemValue) => setSelectedOptionLocation(itemValue)}
+          >
+            <Picker.Item label="Select Location" value="optiona1" />
+            <Picker.Item label="Smart Kitchen" value="optiona2" />
+            <Picker.Item label="Pantry" value="optiona3" />
+            <Picker.Item label="Gym" value="optiona4" />
+            <Picker.Item label="Other" value="optiona5" />
+          </Picker>
+          {selectedOptionLocation === 'option5' && (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter a Location"
+              value={otherLocation}
+              onChangeText={setOtherLocation}
+            />
+          )} 
+          <TextInput
+            variant="outlined"
+            label="Nature of complaint/visit"
+            style={styles.searchInput}
+            value={visit}
+            onChangeText={setVisit}
+            multiline
+            maxLength={200}
+          />
+          <TextInput
+            variant="outlined"
+            label="Actual fault"
+            style={styles.searchInput}
+            value={actualFault}
+            onChangeText={setActualFault}
+            multiline
+            maxLength={200}
+          />
+          <TextInput
+            variant="outlined"
+            label="Action Taken"
+              style={styles.searchInput}
+            value={actionteken}
+            onChangeText={setActionTeken}
+            multiline
+            maxLength={200}
+          />
+
+          <Picker
+            selectedValue={selectedOptionremark}
+            style={styles.picker}
+            onValueChange={(itemValue) => setSelectedOptionremark(itemValue)}
+          >
+            <Picker.Item label="Select Remark" value="optiona1" />
+            <Picker.Item label="Working Fully" value="optiona2" />
+            <Picker.Item label="Working Moderately" value="optiona3" />
+            <Picker.Item label="Not Working" value="optiona4" />
+          </Picker>
+
+          
+          
+          
+
+
+<View style={{display:"flex",alignItems:'center', justifyContent:'space-between',flexDirection:'row',width:"100%", marginTop:8,marginStart:'10'}}>
+<TouchableOpacity style={styles.customButtona} onPress={handleAddItem}>
+            <Text style={styles.buttonText}>Add Item</Text>
+          </TouchableOpacity>
+         
+          {/* <TouchableOpacity style={styles.customButtons} onPress={handleSubmits}>
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity> */}
+          
+  
+</View>
+          {/* <TouchableOpacity style={styles.customButton} onPress={handleAddItem}>
+            <Text style={styles.buttonText}>Add Item</Text>
+          </TouchableOpacity>
+         
+          <TouchableOpacity style={styles.customButton} onPress={handleSubmit}>
+            <Text style={styles.buttonText}>Save</Text>
+          </TouchableOpacity> */}
+          
+          
+
+        
+        {isVisible && (
+          <View>
+            <View style={{height:2,width:'85%',backgroundColor:'black',alignSelf:'center'}}></View>
+            <AddTable/>
+            <TouchableOpacity style={styles.customButtonclose} onPress={handlecancel}>
+            <Text style={styles.buttonText}>close Table</Text>
+          </TouchableOpacity>
+          </View>
+        )}
+
+          </>
+        )}
+
         <TouchableOpacity style={styles.customButton} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Save</Text>
         </TouchableOpacity>
@@ -504,13 +655,30 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   customButton: {
+    backgroundColor: 'green',
     marginTop: 20,
-    backgroundColor: 'black',
     paddingVertical: 10,
     paddingHorizontal: 20,
     marginHorizontal: 120,
     borderRadius: 12,
-    borderWidth: 3,
+    borderWidth: 2,
+    borderColor: 'black',
+    alignItems: 'center',
+    marginBottom: 15,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 5,
+  },
+  customButtonclose: {
+    marginTop: 20,
+    backgroundColor: 'red',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    marginHorizontal: 120,
+    borderRadius: 12,
+    borderWidth: 1,
     borderColor: 'black',
     alignItems: 'center',
     marginBottom: 15,
@@ -616,6 +784,43 @@ marginTop: 5
     elevation: 5,
     width:80,
   },
+  customButtona: {
+    marginRight: 10,
+    marginTop:20,
+    backgroundColor: 'blue',
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    marginHorizontal: 70,
+    borderRadius: 12,
+    borderWidth: 2,
+    borderColor: 'black',
+    alignItems: 'center',
+    marginBottom: 15,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 5,
+  },
+  customButtons: {
+    marginTop: 20,
+    marginLeft:35,
+    backgroundColor: 'green',
+    paddingVertical: 10,
+    paddingHorizontal: 30,
+    marginHorizontal: 120,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'black',
+    alignItems: 'center',
+    marginBottom: 15,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 5,
+    marginleft: 20,
+  },
   buttonTextd: {
     color: '#fff',
     fontSize: 16,
@@ -625,6 +830,20 @@ marginTop: 5
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  picker: {
+    borderColor: '#ccc',
+    borderWidth: 2,
+    borderRadius: 10,
+    backgroundColor: '#fff',
+    paddingHorizontal: 10,
+    height: 48,
+    justifyContent: 'center',
+    elevation: 3,
+    margin: 7,
+    marginTop:30,
+    marginBottom: 15,
+    marginHorizontal: 10,
   },
 });
 

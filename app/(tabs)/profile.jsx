@@ -1,99 +1,81 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { TextInput as RNMaterialTextInput, Button } from "@react-native-material/core";
-import Animated, { Layout, FadeIn, FadeOut } from 'react-native-reanimated';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Animated } from 'react-native';
 
-const AdvancedTable = () => {
-  const [filterText, setFilterText] = useState('');
-  
-  const [items, setItems] = useState([
-    { id: '1', name: 'Item 1', quantity: 10, price: 100 },
-    { id: '2', name: 'Item 2', quantity: 20, price: 200 },
-    // More items...
-  ]);
+const Profile = () => {
+  const [modalVisible, setModalVisible] = useState(false);
+  const [fadeAnim] = useState(new Animated.Value(0)); // Initial opacity for the animation
 
-  const [newItem, setNewItem] = useState({ name: '', quantity: '', price: '' });
-
-  const handleAddItem = () => {
-    if (newItem.name && newItem.quantity && newItem.price) {
-      const id = (items.length + 1).toString();
-      setItems([...items, { id, ...newItem }]);
-      setNewItem({ name: '', quantity: '', price: '' });
-    }
+  const openModal = () => {
+    setModalVisible(true);
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 300,
+      useNativeDriver: true,
+    }).start();
   };
 
-  const filteredItems = items.filter(item =>
-    item.name.toLowerCase().includes(filterText.toLowerCase())
-  );
-
-  const renderItem = ({ item }) => (
-    <Animated.View
-      entering={FadeIn}
-      exiting={FadeOut}
-      layout={Layout.springify()}
-      style={styles.row}
-    >
-      <Text style={styles.cell}>{item.name}</Text>
-      <Text style={styles.cell}>{item.quantity}</Text>
-      <Text style={styles.cell}>{item.price}</Text>
-    </Animated.View>
-  );
+  const closeModal = () => {
+    Animated.timing(fadeAnim, {
+      toValue: 0,
+      duration: 300,
+      useNativeDriver: true,
+    }).start(() => {
+      setModalVisible(false);
+    });
+  };
 
   return (
     <View style={styles.container}>
-      {/* Filter Input */}
-      <RNMaterialTextInput
-        label="Filter by equpment name"
-        value={filterText}
-        onChangeText={setFilterText}
-        style={styles.filterInput}
-      />
-
-      {/* Table */}
-      <View style={styles.table}>
-        <Animated.FlatList
-          data={filteredItems}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          ListHeaderComponent={
-            <View style={styles.header}>
-              <Text style={styles.headerText}> </Text>
-              <Text style={styles.headerText}>Quantity</Text>
-              <Text style={styles.headerText}>Price</Text>
-            </View>
-          }
+      <View style={styles.profileContainer}>
+        <Image
+          source={require('../../assets/images/Person.png')} // Replace with your image path
+          style={styles.profileImage}
         />
+        <Text style={styles.profileName}>John Doe</Text>
       </View>
 
-      {/* Add Item Form */}
-      <View style={styles.form}>
-        <RNMaterialTextInput
-          label=" Equipment Name"
-          value={newItem.name}
-          onChangeText={text => setNewItem({ ...newItem, name: text })}
-          style={styles.input}
-        />
-        <RNMaterialTextInput
-          label="Quantity"
-          value={newItem.quantity}
-          onChangeText={text => setNewItem({ ...newItem, quantity: text })}
-          keyboardType="numeric"
-          style={styles.input}
-        />
-        <RNMaterialTextInput
-          label="Price"
-          value={newItem.price}
-          onChangeText={text => setNewItem({ ...newItem, price: text })}
-          keyboardType="numeric"
-          style={styles.input}
-        />
-        <Button
-          title="Add Item"
-          onPress={handleAddItem}
-          style={styles.addButton}
-          contentContainerStyle={styles.addButtonContent}
-        />
+      <View style={styles.cardContainer}>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Total</Text>
+          <Text style={styles.cardContent}>5</Text>
+        </View>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Complete</Text>
+          <Text style={styles.cardContent}>3</Text>
+        </View>
+        <View style={styles.card}>
+          <Text style={styles.cardTitle}>Pending</Text>
+          <Text style={styles.cardContent}>2</Text>
+        </View>
       </View>
+
+      {/* Trigger Button for Modal */}
+      <TouchableOpacity style={styles.optionButton} onPress={openModal}>
+        <Text style={styles.optionButtonText}>Log Out Forget Pass</Text>
+      </TouchableOpacity>
+
+      {/* Animated Modal */}
+      <Modal
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={closeModal}
+        animationType="none"
+      >
+        <View style={styles.modalBackground}>
+          <Animated.View style={[styles.modalContainer, { opacity: fadeAnim }]}>
+            <Text style={styles.modalTitle}>Choose an Option</Text>
+            <TouchableOpacity style={styles.modalButton} onPress={() => alert('Log Out')}>
+              <Text style={styles.modalButtonText}>Log Out</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.modalButton} onPress={() => alert('Forgot Password')}>
+              <Text style={styles.modalButtonText}>Forget Password</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
+              <Text style={styles.closeButtonText}>Close</Text>
+            </TouchableOpacity>
+          </Animated.View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -101,56 +83,104 @@ const AdvancedTable = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: '#f8f8f8',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 5,
   },
-  filterInput: {
+  profileContainer: {
+    alignItems: 'center',
     marginBottom: 20,
   },
-  table: {
-    borderRadius: 10,
+  profileImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    marginBottom: 30,
+  },
+  profileName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  cardContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    flexWrap: 'wrap',
+  },
+  card: {
     backgroundColor: '#fff',
+    borderRadius: 10,
     padding: 10,
+    marginHorizontal: 5,
+    elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
+    shadowRadius: 4,
+    flex: 1,
+    maxWidth: 300,
+    height: 150,
   },
-  header: {
-    flexDirection: 'row',
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-    paddingBottom: 10,
+  cardTitle: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    alignSelf: 'center',
     marginBottom: 10,
   },
-  headerText: {
-    flex: 1,
+  cardContent: {
+    fontSize: 50,
     fontWeight: 'bold',
+    alignSelf: 'center',
+  },
+  optionButton: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#007BFF',
+    borderRadius: 8,
+  },
+  optionButtonText: {
+    color: '#fff',
+    fontSize: 18,
+  },
+  modalBackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContainer: {
+    width: 300,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    alignItems: 'center',
+  },
+  modalTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 20,
+  },
+  modalButton: {
+    padding: 10,
+    backgroundColor: '#007BFF',
+    borderRadius: 8,
+    marginVertical: 5,
+    width: '100%',
+    alignItems: 'center',
+  },
+  modalButtonText: {
+    color: '#fff',
     fontSize: 16,
   },
-  row: {
-    flexDirection: 'row',
-    paddingVertical: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
+  closeButton: {
+    marginTop: 15,
   },
-  cell: {
-    flex: 1,
-    fontSize: 14,
-  },
-  form: {
-    marginTop: 30,
-  },
-  input: {
-    marginBottom: 15,
-  },
-  addButton: {
-    marginTop: 20,
-  },
-  addButtonContent: {
-    paddingVertical: 10,
+  closeButtonText: {
+    color: '#FF0000',
+    fontSize: 16,
   },
 });
 
-export default AdvancedTable;
+export default Profile;
+
+

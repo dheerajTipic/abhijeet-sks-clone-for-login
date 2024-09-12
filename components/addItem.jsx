@@ -68,7 +68,7 @@ const AddTable = () => {
       {/* Add Item Form */}
       <View style={styles.form}>
         <RNMaterialTextInput
-          label=" Item"
+          label="Item"
           value={newItem.name}
           onChangeText={text => setNewItem({ ...newItem, name: text })}
           style={styles.input}

@@ -1,11 +1,11 @@
-import { TextInput } from '@react-native-material/core';
 import React, { useState, useRef } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Animated } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Animated, TextInput } from 'react-native';
 
 const Profile = () => {
   const [modalVisible, setModalVisible] = useState({ total: false, complete: false, pending: false, options: false, logout: false, changePassword: false });
   const [fadeAnim] = useState(new Animated.Value(0)); // Initial opacity for animation
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 }); // State to hold the modal position
+  const [newPassword, setNewPassword] = useState(''); // State to store new password input
 
   // Create refs for each card using createRef
   const totalCardRef = useRef(null);
@@ -111,14 +111,14 @@ const Profile = () => {
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Log Out</Text>
             <Text style={styles.modalContent}>Are you sure you want to log out?</Text>
-          
-          
-            <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('logout')}>
-              <Text style={styles.closeButtonText }>Yes</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('logout')}>
-              <Text style={styles.closeButtonText}>No</Text>
-            </TouchableOpacity>
+            <View style={styles.buttonRow}>
+              <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('logout')}>
+                <Text style={styles.closeButtonText}>Yes</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('logout')}>
+                <Text style={styles.closeButtonText}>No</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </Modal>
@@ -133,17 +133,14 @@ const Profile = () => {
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Change Password</Text>
-            <Text style={styles.modalContent}>Please enter your new password.</Text>
-            {/* here do changes as you want */}
+            <Text style={styles.modalContent}>Please enter your new password:</Text>
             <TextInput
-            variant="outlined"
-            label="New password"
-            style={styles.searchInput}
-          //  value={visit}
-           // onChangeText={setVisit}
-            
-          />
-          
+              style={styles.textInput}
+              placeholder="New Password"
+              secureTextEntry={true}
+              value={newPassword}
+              onChangeText={setNewPassword}
+            />
             <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('changePassword')}>
               <Text style={styles.closeButtonText}>Submit</Text>
             </TouchableOpacity>
@@ -248,8 +245,24 @@ const styles = StyleSheet.create({
     fontSize: 16,
     marginBottom: 20,
   },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+  },
+  textInput: {
+    width: '100%',
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 5,
+    marginBottom: 20,
+    paddingHorizontal: 10,
+  },
   closeButton: {
-    marginTop: 15,
+    flex: 1,
+    alignItems: 'center',
+    padding: 10,
   },
   closeButtonText: {
     color: '#FF0000',

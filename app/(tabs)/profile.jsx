@@ -1,31 +1,63 @@
-import React, { useState } from 'react';
+import { TextInput } from '@react-native-material/core';
+import React, { useState, useRef } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Animated } from 'react-native';
 
 const Profile = () => {
-  const [modalVisible, setModalVisible] = useState(false);
-  const [fadeAnim] = useState(new Animated.Value(0)); // Initial opacity for the animation
+  const [modalVisible, setModalVisible] = useState({ total: false, complete: false, pending: false, options: false, logout: false, changePassword: false });
+  const [fadeAnim] = useState(new Animated.Value(0)); // Initial opacity for animation
+  const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 }); // State to hold the modal position
 
-  const openModal = () => {
-    setModalVisible(true);
-    Animated.timing(fadeAnim, {
-      toValue: 1,
-      duration: 300,
-      useNativeDriver: true,
-    }).start();
+  // Create refs for each card using createRef
+  const totalCardRef = useRef(null);
+  const completeCardRef = useRef(null);
+  const pendingCardRef = useRef(null);
+
+  const openModal = (type) => {
+    let ref;
+
+    // Set ref according to the card type
+    if (type === 'total') ref = totalCardRef;
+    if (type === 'complete') ref = completeCardRef;
+    if (type === 'pending') ref = pendingCardRef;
+
+    if (ref && ref.current) {
+      ref.current.measure((fx, fy, width, height, px, py) => {
+        setModalPosition({ x: px, y: py - height }); // Position above the card
+        setModalVisible((prev) => ({ ...prev, [type]: true }));
+        Animated.timing(fadeAnim, {
+          toValue: 1,
+          duration: 300,
+          useNativeDriver: true,
+        }).start();
+      });
+    } else {
+      // For other modals like logout and change password, just set visibility
+      setModalVisible((prev) => ({ ...prev, [type]: true }));
+    }
   };
 
-  const closeModal = () => {
+  const closeModal = (type) => {
     Animated.timing(fadeAnim, {
       toValue: 0,
       duration: 300,
       useNativeDriver: true,
     }).start(() => {
-      setModalVisible(false);
+      setModalVisible((prev) => ({ ...prev, [type]: false }));
     });
   };
 
   return (
     <View style={styles.container}>
+      {/* Top Right Corner Buttons */}
+      <View style={styles.topRightButtons}>
+        <TouchableOpacity style={styles.topButton} onPress={() => openModal('logout')}>
+          <Text style={styles.topButtonText}>Log Out</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.topButton} onPress={() => openModal('changePassword')}>
+          <Text style={styles.topButtonText}>Change Password</Text>
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.profileContainer}>
         <Image
           source={require('../../assets/images/Person.png')} // Replace with your image path
@@ -35,45 +67,90 @@ const Profile = () => {
       </View>
 
       <View style={styles.cardContainer}>
-        <View style={styles.card}>
+        {/* Card for Total */}
+        <TouchableOpacity
+          ref={totalCardRef}
+          style={styles.card}
+          onPress={() => openModal('total')}
+        >
           <Text style={styles.cardTitle}>Total</Text>
           <Text style={styles.cardContent}>5</Text>
-        </View>
-        <View style={styles.card}>
+        </TouchableOpacity>
+
+        {/* Card for Complete */}
+        <TouchableOpacity
+          ref={completeCardRef}
+          style={styles.card}
+          onPress={() => openModal('complete')}
+        >
           <Text style={styles.cardTitle}>Complete</Text>
           <Text style={styles.cardContent}>3</Text>
-        </View>
-        <View style={styles.card}>
+        </TouchableOpacity>
+
+        {/* Card for Pending */}
+        <TouchableOpacity
+          ref={pendingCardRef}
+          style={styles.card}
+          onPress={() => openModal('pending')}
+        >
           <Text style={styles.cardTitle}>Pending</Text>
           <Text style={styles.cardContent}>2</Text>
-        </View>
+        </TouchableOpacity>
       </View>
 
-      {/* Trigger Button for Modal */}
-      <TouchableOpacity style={styles.optionButton} onPress={openModal}>
-        <Text style={styles.optionButtonText}>Log Out Forget Pass</Text>
-      </TouchableOpacity>
+      {/* Existing Modals for Total, Complete, and Pending remain unchanged */}
 
-      {/* Animated Modal */}
+      {/* Modal for Logout */}
       <Modal
         transparent={true}
-        visible={modalVisible}
-        onRequestClose={closeModal}
-        animationType="none"
+        visible={modalVisible.logout}
+        onRequestClose={() => closeModal('logout')}
+        animationType="fade"
       >
         <View style={styles.modalBackground}>
-          <Animated.View style={[styles.modalContainer, { opacity: fadeAnim }]}>
-            <Text style={styles.modalTitle}>Choose an Option</Text>
-            <TouchableOpacity style={styles.modalButton} onPress={() => alert('Log Out')}>
-              <Text style={styles.modalButtonText}>Log Out</Text>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Log Out</Text>
+            <Text style={styles.modalContent}>Are you sure you want to log out?</Text>
+          
+          
+            <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('logout')}>
+              <Text style={styles.closeButtonText }>Yes</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.modalButton} onPress={() => alert('Forgot Password')}>
-              <Text style={styles.modalButtonText}>Forget Password</Text>
+            <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('logout')}>
+              <Text style={styles.closeButtonText}>No</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.closeButton} onPress={closeModal}>
-              <Text style={styles.closeButtonText}>Close</Text>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Modal for Change Password */}
+      <Modal
+        transparent={true}
+        visible={modalVisible.changePassword}
+        onRequestClose={() => closeModal('changePassword')}
+        animationType="fade"
+      >
+        <View style={styles.modalBackground}>
+          <View style={styles.modalContainer}>
+            <Text style={styles.modalTitle}>Change Password</Text>
+            <Text style={styles.modalContent}>Please enter your new password.</Text>
+            {/* here do changes as you want */}
+            <TextInput
+            variant="outlined"
+            label="New password"
+            style={styles.searchInput}
+          //  value={visit}
+           // onChangeText={setVisit}
+            
+          />
+          
+            <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('changePassword')}>
+              <Text style={styles.closeButtonText}>Submit</Text>
             </TouchableOpacity>
-          </Animated.View>
+            <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('changePassword')}>
+              <Text style={styles.closeButtonText}>Cancel</Text>
+            </TouchableOpacity>
+          </View>
         </View>
       </Modal>
     </View>
@@ -86,6 +163,23 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: 5,
+  },
+  topRightButtons: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  topButton: {
+    padding: 8,
+    marginLeft: 10,
+    backgroundColor: '#007BFF',
+    borderRadius: 5,
+  },
+  topButtonText: {
+    color: '#fff',
+    fontSize: 14,
   },
   profileContainer: {
     alignItems: 'center',
@@ -132,21 +226,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center',
   },
-  optionButton: {
-    marginTop: 20,
-    padding: 10,
-    backgroundColor: '#007BFF',
-    borderRadius: 8,
-  },
-  optionButtonText: {
-    color: '#fff',
-    fontSize: 18,
-  },
   modalBackground: {
     flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.5)',
   },
   modalContainer: {
     width: 300,
@@ -160,17 +244,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 20,
   },
-  modalButton: {
-    padding: 10,
-    backgroundColor: '#007BFF',
-    borderRadius: 8,
-    marginVertical: 5,
-    width: '100%',
-    alignItems: 'center',
-  },
-  modalButtonText: {
-    color: '#fff',
+  modalContent: {
     fontSize: 16,
+    marginBottom: 20,
   },
   closeButton: {
     marginTop: 15,
@@ -182,5 +258,3 @@ const styles = StyleSheet.create({
 });
 
 export default Profile;
-
-

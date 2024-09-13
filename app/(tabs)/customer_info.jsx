@@ -8,6 +8,7 @@ import AddTable from '../../components/addItem';
 //......................................................Dailog
 const AnimatedDialog = ({ visible, onClose, onSubmit, customerName, setCustomerName, address, setAddress, contactPerson, setContactPerson, email, setEmail, error }) => {
   const [show, setShow] = useState(visible);
+  
   const scaleValue = useRef(new Animated.Value(0)).current;
   const opacityValue = useRef(new Animated.Value(0)).current;
   const translateYValue = useRef(new Animated.Value(50)).current;
@@ -21,7 +22,9 @@ setErrord('All fields are required!');
 
 } else {
 setErrord('');
-router.push('/service_info'); 
+onClose();
+router.push('/profile');
+
 setCustomerName('');
 setAddress('');
 setContactPerson('');
@@ -136,7 +139,7 @@ setEmail('');
 <View style={{display:"flex",alignItems:'center', justifyContent:'space-between',flexDirection:'row',width:"100%", marginTop:8,
 
 }}>
-<TouchableOpacity style={styles.customButtond} onPress={handleSubmitd}>
+<TouchableOpacity style={styles.customButtond} onPress={handleSubmitd  }>
           <Text style={styles.buttonTextd}>Save</Text>
         </TouchableOpacity>
              
@@ -393,11 +396,16 @@ const CustomerInfo = () => {
         )}
 
         {filteredData.length === 0 && searchQuery.length > 0 && (
-          <Button
-            style={styles.dailogBtn}
-            title="Add"
-            onPress={() => setVisible(true)}
-          />
+          // <Button
+          //   style={styles.dailogBtn}
+          //   title="Add"
+          //   onPress={() => setVisible(true)}
+
+          // />
+          <TouchableOpacity style={styles.customButtonadd}   onPress={() => setVisible(true)}>
+  <Text style={styles.buttonText}>Add</Text>    
+</TouchableOpacity>
+
         )}
 
         <AnimatedDialog
@@ -639,6 +647,10 @@ const styles = StyleSheet.create({
     marginStart: 255,
     alignSelf: 'flex-end',
     marginEnd: 10,
+    color:'black',
+    borderBlockColor:'black',
+  
+    borderColor: 'black',
   },
   suggestionItem: {
     padding: 10,
@@ -661,6 +673,25 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     marginHorizontal: 120,
     borderRadius: 12,
+    borderWidth: 2,
+    borderColor: 'black',
+    alignItems: 'center',
+    marginBottom: 15,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 5,
+  },
+  customButtonadd: {
+    backgroundColor: 'black',
+    // marginTop: 20,
+    paddingVertical: 4,
+    paddingHorizontal: 15,
+    marginStart: 255,
+    alignSelf: 'flex-end',
+    marginEnd: 10,
+    borderRadius: 8,
     borderWidth: 2,
     borderColor: 'black',
     alignItems: 'center',
@@ -741,8 +772,8 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   input:{
-marginTop: 5
-,
+marginTop: 5,
+
 
 
   },
@@ -846,6 +877,7 @@ marginTop: 5
     marginHorizontal: 10,
   },
 });
+
 
 const AppProvider = () => (
   <Provider>

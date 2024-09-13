@@ -1,12 +1,18 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Animated, TextInput } from 'react-native';
+import { deleteToken, getToken } from '../util/asyncStorage';
+import { router } from 'expo-router';
+import { post} from '../util/api';
 
 const Profile = () => {
   const [modalVisible, setModalVisible] = useState({ total: false, complete: false, pending: false, options: false, logout: false, changePassword: false });
   const [fadeAnim] = useState(new Animated.Value(0)); // Initial opacity for animation
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 }); // State to hold the modal position
   const [newPassword, setNewPassword] = useState(''); // State to store new password input
-
+  const [oldPassword, setOldPassword] = useState('');
+  const [email, setemail] = useState('');
+  const [reEnterPassword, setReEnterPassword] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
   // Create refs for each card using createRef
   const totalCardRef = useRef(null);
   const completeCardRef = useRef(null);
@@ -45,7 +51,27 @@ const Profile = () => {
       setModalVisible((prev) => ({ ...prev, [type]: false }));
     });
   };
-
+  const handlePress = async () => {
+    try {
+      // const ss = getToken();
+    
+      await deleteToken();
+      // const s = getToken
+    router.push('/'); // Navigate to homepage
+    } catch (error) {
+      console.error('Error during delete token or navigation:', error);
+    }
+  };
+  const handlePasswordSubmit = async () => {
+    if (newPassword === reEnterPassword && oldPassword && email) {
+      setSuccessMessage('Password successfully updated');
+      setModalVisible(false);
+      // Add logic for password update API call here
+      const response = await post('/changepassword',{ email, oldPassword,newPassword });
+    } else {
+      Alert.alert('Error', 'Passwords do not match or fields are empty.');
+    }
+  };
   return (
     <View style={styles.container}>
       {/* Top Right Corner Buttons */}
@@ -53,9 +79,9 @@ const Profile = () => {
         <TouchableOpacity style={styles.topButton} onPress={() => openModal('logout')}>
           <Text style={styles.topButtonText}>Log Out</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.topButton} onPress={() => openModal('changePassword')}>
+        {/* <TouchableOpacity style={styles.topButton} onPress={() => openModal('changePassword')}>
           <Text style={styles.topButtonText}>Change Password</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
 
       <View style={styles.profileContainer}>
@@ -97,8 +123,12 @@ const Profile = () => {
           <Text style={styles.cardContent}>2</Text>
         </TouchableOpacity>
       </View>
-
+      <View style={styles.Line1} />
+      <TouchableOpacity style={styles.topButton} onPress={() => openModal('changePassword')}>
+          <Text style={styles.topButtonText}>Change Password</Text>
+        </TouchableOpacity>
       {/* Existing Modals for Total, Complete, and Pending remain unchanged */}
+      
 
       {/* Modal for Logout */}
       <Modal
@@ -112,8 +142,8 @@ const Profile = () => {
             <Text style={styles.modalTitle}>Log Out</Text>
             <Text style={styles.modalContent}>Are you sure you want to log out?</Text>
             <View style={styles.buttonRow}>
-              <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('logout')}>
-                <Text style={styles.closeButtonText}>Yes</Text>
+              <TouchableOpacity style={styles.closeButton} onPress={handlePress} >
+                <Text style={styles.closeButtonText} >Yes</Text>
               </TouchableOpacity>
               <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('logout')}>
                 <Text style={styles.closeButtonText}>No</Text>
@@ -133,7 +163,20 @@ const Profile = () => {
         <View style={styles.modalBackground}>
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Change Password</Text>
-            <Text style={styles.modalContent}>Please enter your new password:</Text>
+            {/* <Text style={styles.modalContent}>Please enter your new password:</Text> */}
+            <TextInput
+              style={styles.textInput}
+              placeholder="email_id"
+              value={ email}
+              onChangeText={ setemail}
+            />
+            <TextInput
+              style={styles.textInput}
+              placeholder="old_password"
+              value={oldPassword}
+              onChangeText={ setOldPassword}
+            />
+            
             <TextInput
               style={styles.textInput}
               placeholder="New Password"
@@ -141,7 +184,13 @@ const Profile = () => {
               value={newPassword}
               onChangeText={setNewPassword}
             />
-            <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('changePassword')}>
+            <TextInput
+              style={styles.textInput}
+              placeholder="Re-enter password"
+              value={ reEnterPassword}
+              onChangeText={ setReEnterPassword}
+            />
+            <TouchableOpacity style={styles.closeButton} onPress={handlePasswordSubmit}>
               <Text style={styles.closeButtonText}>Submit</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('changePassword')}>
@@ -173,6 +222,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     backgroundColor: '#007BFF',
     borderRadius: 5,
+    alignSelf:'flex-start',
   },
   topButtonText: {
     color: '#fff',
@@ -217,6 +267,13 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center',
     marginBottom: 10,
+  },
+  Line1: {
+    width: '100%',
+    height: 2,
+    backgroundColor: 'black',
+    marginVertical: 10,
+    marginBottom: 20,
   },
   cardContent: {
     fontSize: 50,

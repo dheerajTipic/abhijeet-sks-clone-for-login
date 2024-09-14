@@ -7,18 +7,18 @@ const AddTable = () => {
   const [filterText, setFilterText] = useState('');
   
   const [items, setItems] = useState([
-     { id: '1', name: 'Nut Boult', quantity: 10, price: 100 },
-     { id: '2', name: 'Spring', quantity: 20, price: 200 },
+    //  { id: '1', name: '', quantity: 10, price: 100 },
+    //  { id: '2', name: '', quantity: 20, price: 200 },
     // More items...
   ]);
 
-  const [newItem, setNewItem] = useState({ name: '', quantity: '', price: '' });
+  const [newItem, setNewItem] = useState({ name: '', quantity: '', price: '',remark:'' });
 
   const handleAddItem = () => {
-    if (newItem.name && newItem.quantity && newItem.price) {
+    if (newItem.name && newItem.quantity && newItem.price && newItem.remark) {
       const id = (items.length + 1).toString();
       setItems([...items, { id, ...newItem }]);
-      setNewItem({ name: '', quantity: '', price: '' });
+      setNewItem({ name: '', quantity: '', price: '',remark:'' ,});
     }
   };
 
@@ -36,6 +36,7 @@ const AddTable = () => {
       <Text style={styles.cell}>{item.name}</Text>
       <Text style={styles.cell}>{item.quantity}</Text>
       <Text style={styles.cell}>{item.price}</Text>
+      <Text style={styles.cell}>{item.remark}</Text>
     </Animated.View>
   );
 
@@ -58,8 +59,9 @@ const AddTable = () => {
           ListHeaderComponent={
             <View style={styles.header}>
               <Text style={styles.headerText}>Item </Text>
-              <Text style={styles.headerText}>Quantity</Text>
-              <Text style={styles.headerText}>Price</Text>
+              <Text style={styles.headerText}>Description</Text>
+              <Text style={styles.headerText}>Qty</Text>
+              <Text style={styles.headerText}>Remarks</Text>
             </View>
           }
         />
@@ -74,26 +76,38 @@ const AddTable = () => {
           style={styles.input}
         />
         <RNMaterialTextInput
-          label="Quantity"
+          label="Description"
           value={newItem.quantity}
           onChangeText={text => setNewItem({ ...newItem, quantity: text })}
-          keyboardType="numeric"
+         // keyboardType="numeric"
           style={styles.input}
         />
         <RNMaterialTextInput
-          label="Price"
+          label="Qty"
           value={newItem.price}
           onChangeText={text => setNewItem({ ...newItem, price: text })}
           keyboardType="numeric"
           style={styles.input}
         />
-        <Button
+         <RNMaterialTextInput
+          label="Remark"
+          value={newItem.remark}
+          onChangeText={text => setNewItem({ ...newItem, remark: text })}
+         // keyboardType="numeric"
+          style={styles.input}
+        />
+        {/* <Button
           title="Add Item"
           onPress={handleAddItem}
           style={styles.addButton}
           contentContainerStyle={styles.addButtonContent}
-        />
+        /> */}
+        <TouchableOpacity style={styles.addButton}    onPress={handleAddItem}>
+  <Text style={styles.buttonText}>Add Item</Text>    
+</TouchableOpacity>
       </View>
+
+
     </View>
   );
 };
@@ -148,10 +162,32 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   addButton: {
-    marginTop: 20,
+    backgroundColor: 'black',
+    // marginTop: 20,
+    paddingVertical: 4,
+    paddingHorizontal: 15,
+    width:'60%',
+   // marginStart: 255,
+    alignSelf: 'center',
+    marginEnd: 10,
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: 'black',
+    alignItems: 'center',
+    marginBottom: 15,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 5,
   },
   addButtonContent: {
     paddingVertical: 10,
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 

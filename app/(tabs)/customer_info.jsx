@@ -705,6 +705,15 @@ const CustomerInfo = () => {
             <Picker.Item label="Working Moderately" value="optiona3" />
             <Picker.Item label="Not Working" value="optiona4" />
           </Picker>
+          <TextInput
+            variant="outlined"
+            label="Customer Suggestion"
+            style={styles.searchInput}
+           // value={visit}
+          //  onChangeText={setVisit}
+            multiline
+            maxLength={200}
+          />
 
           
           </>
@@ -756,13 +765,17 @@ const CustomerInfo = () => {
           <View>
             {/* <View style={{height:2,width:'85%',backgroundColor:'black',alignSelf:'center'}}></View> */}
             <AddTable/>
+
             {/* <SafeAreaView style={{ flex: 1 }}>
       <SignaturePad />
     </SafeAreaView> */}
             <TouchableOpacity style={styles.customButtonclose} onPress={handlecancel}>
             <Text style={styles.buttonText}>close Table</Text>
+
           </TouchableOpacity>
-          
+
+
+         
           
           </View>
         )}

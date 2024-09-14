@@ -7,8 +7,8 @@ const AddTable = () => {
   const [filterText, setFilterText] = useState('');
   
   const [items, setItems] = useState([
-     { id: '1', name: 'sam', quantity: 10, price: 100 },
-     { id: '2', name: 'sagar', quantity: 20, price: 200 },
+     { id: '1', name: 'Nut Boult', quantity: 10, price: 100 },
+     { id: '2', name: 'Spring', quantity: 20, price: 200 },
     // More items...
   ]);
 
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
     padding: 20,
      backgroundColor: '#D3D3D3',
     borderWidth:4,
-    borderRadius:50,
+    borderRadius:25,
   },
   filterInput: {
     marginBottom: 20,

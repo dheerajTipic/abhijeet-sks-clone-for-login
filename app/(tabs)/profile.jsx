@@ -1,24 +1,25 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Animated, TextInput,ScrollView } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Animated, TextInput, Alert } from 'react-native';
 import { deleteToken, getToken } from '../util/asyncStorage';
 import { router } from 'expo-router';
 import { post} from '../util/api';
-//import { ScrollView } from 'react-native-web';
 
 const Profile = () => {
   const [modalVisible, setModalVisible] = useState({ total: false, complete: false, pending: false, options: false, logout: false, changePassword: false });
   const [fadeAnim] = useState(new Animated.Value(0)); // Initial opacity for animation
   const [modalPosition, setModalPosition] = useState({ x: 0, y: 0 }); // State to hold the modal position
-  const [newPassword, setNewPassword] = useState(''); // State to store new password input
-  const [oldPassword, setOldPassword] = useState('');
-  const [email, setemail] = useState('');
+  const [new_password, setNewPassword] = useState(''); // State to store new password input
+  const [password, setOldPassword] = useState('');
+  // const [email, setemail] = useState('');
   const [reEnterPassword, setReEnterPassword] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
   // Create refs for each card using createRef
+  const email = "D@123.com";
+  // const Data= getUserData( )
   const totalCardRef = useRef(null);
   const completeCardRef = useRef(null);
   const pendingCardRef = useRef(null);
-
+ 
   const openModal = (type) => {
     let ref;
 
@@ -64,12 +65,14 @@ const Profile = () => {
       console.error('Error during delete token or navigation:', error);
     }
   };
+
+
   const handlePasswordSubmit = async () => {
-    if (newPassword === reEnterPassword && oldPassword && email) {
+    if (new_password === reEnterPassword && password && email) {
       setSuccessMessage('Password successfully updated');
       setModalVisible(false);
       // Add logic for password update API call here
-      const response = await post('/changepassword',{ email, oldPassword,newPassword });
+      const response = await post('/api/changePassword',{ email, password,new_password });
     } else {
       Alert.alert('Error', 'Passwords do not match or fields are empty.');
     }
@@ -145,10 +148,10 @@ const Profile = () => {
             <Text style={styles.modalContent}>Are you sure you want to log out?</Text>
             <View style={styles.buttonRow}>
             <TouchableOpacity style={styles.closeButton} onPress={handlePress}>
-  <Text style={styles.closeButtonText}>Yes</Text>
-</TouchableOpacity>
+           <  Text style={styles.closeButtonTextO}>Yes</Text>
+              </TouchableOpacity>
               <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('logout')}>
-                <Text style={styles.closeButtonText}>No</Text>
+                <Text style={styles.closeButtonTextO}>No</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -166,17 +169,16 @@ const Profile = () => {
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Change Password</Text>
             {/* <Text style={styles.modalContent}>Please enter your new password:</Text> */}
-            <ScrollView contentContainerStyle={styles.scrollContainer}>
-            <TextInput
+            {/* <TextInput
               style={styles.textInput}
               placeholder="email_id"
               value={ email}
               onChangeText={ setemail}
-            />
+            /> */}
             <TextInput
               style={styles.textInput}
               placeholder="old_password"
-              value={oldPassword}
+              value={password}
               onChangeText={ setOldPassword}
             />
             
@@ -184,23 +186,26 @@ const Profile = () => {
               style={styles.textInput}
               placeholder="New Password"
               secureTextEntry={true}
-              value={newPassword}
+              value={new_password}
               onChangeText={setNewPassword}
             />
             <TextInput
               style={styles.textInput}
-              placeholder="Re-enter password"
+              placeholder="Conform password"
               value={ reEnterPassword}
               onChangeText={ setReEnterPassword}
             />
-            <TouchableOpacity style={styles.closeButton} onPress={(handlePasswordSubmit) => closeModal('changePassword')}>
+ {/* (handlePasswordSubmit) => closeModal('changePassword') */}
+            <View style={{display:"flex",alignItems:'center', justifyContent:'space-between',flexDirection:'row',width:"100%", marginTop:8,}}>
+            <TouchableOpacity style={styles.closeButton1} onPress={(handlePasswordSubmit)}>
               <Text style={styles.closeButtonText}>Submit</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('changePassword')}>
+            <TouchableOpacity style={styles.closeButton2} onPress={() => closeModal('changePassword')}>
               <Text style={styles.closeButtonText}>Cancel</Text>
             </TouchableOpacity>
-            </ScrollView>
+            </View>
           </View>
+          
         </View>
       </Modal>
     </View>
@@ -220,6 +225,43 @@ const styles = StyleSheet.create({
     right: 10,
     flexDirection: 'row',
     justifyContent: 'flex-end',
+  },
+  closeButton1:{
+    marginTop: 10,
+    marginLeft: 10,
+    backgroundColor: 'green',
+    paddingVertical: 10,
+    paddingHorizontal: 13,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: 'black',
+    alignItems: 'center',
+    marginBottom: 15,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 5,
+    marginleft: 20,
+  },
+  closeButton2:{
+    marginTop: 10,
+  //  marginLeft:2,
+    backgroundColor: '#BF0000',
+    paddingVertical: 10,
+    paddingHorizontal: 13,
+    //marginHorizontal: 10,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: 'black',
+    alignItems: 'center',
+    marginBottom: 15,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 5,
+    width:80,
   },
   topButton: {
     padding: 8,
@@ -246,6 +288,11 @@ const styles = StyleSheet.create({
   profileName: {
     fontSize: 20,
     fontWeight: 'bold',
+  },
+  Change_ButtonsGruop:{
+    flex:0,
+    justifyContent:'flex-start',
+
   },
   cardContainer: {
     flexDirection: 'row',
@@ -285,11 +332,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center',
   },
-  scrollContainer: {
-    //flexGrow: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   modalBackground: {
     flex: 1,
     justifyContent: 'center',
@@ -327,12 +369,16 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   closeButton: {
-    flex: 1,
-    alignItems: 'center',
-    padding: 10,
+
   },
   closeButtonText: {
-    color: '#FF0000',
+    color: 'white',
+    padding: 0,
+    fontSize: 16,
+  },
+  closeButtonTextO: {
+    color: 'red',
+    padding: 0,
     fontSize: 16,
   },
 });

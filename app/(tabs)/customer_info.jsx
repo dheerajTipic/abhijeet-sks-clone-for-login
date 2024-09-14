@@ -222,20 +222,30 @@ const CustomerInfo = () => {
   
  // const [otherCall, setOtherCall] = useState('');
 
+  // const data = [
+  //   'Hayat Hotel',
+  //   'Tipic',
+  //   'Swad',
+  //   'Swayananad',
+  //   'Anant Hotel',
+  //   'PureVeg Hotel',
+  //   'NonVeg Hotel',
+  // ];
+
   const data = [
-    'Hayat Hotel',
-    'Tipic',
-    'Swad',
-    'Swayananad',
-    'Anant Hotel',
-    'PureVeg Hotel',
-    'NonVeg Hotel',
+    { name: 'Hayat Hotel', address: 'Kevesh nagar Mundava ', contactPerson: 'samir sutar' },
+    { name: 'Tipic', address: 'akurdi-pune', contactPerson: 'Tejas Patil' },
+    { name: 'Swad', address: '789 Central Ave', contactPerson: 'Michael Johnson' },
+    { name: 'Swayananad', address: '987 Elm St', contactPerson: 'Emma Williams' },
+    { name: 'Anant Hotel', address: '654 Oak St', contactPerson: 'Olivia Brown' },
+    { name: 'PureVeg Hotel', address: '321 Maple Rd', contactPerson: 'Liam Davis' },
+    { name: 'NonVeg Hotel', address: '159 Pine St', contactPerson: 'Sophia Wilson' },
   ];
   const eqpData =[
     
     'Bajaj',
     'Tata',
-    'aaa',
+    'aaa', 
     'demo1',
     'Microwave',
     'Blender',
@@ -263,12 +273,24 @@ const CustomerInfo = () => {
  
   
 
+  // const handleSearch = (text) => {
+  //   setSearchQuery(text);
+  //   setIsCustomerSelected(false);
+  //   if (text) {
+  //     const results = data.filter((item) =>
+  //       item.toLowerCase().includes(text.toLowerCase())
+  //     );
+  //     setFilteredData(results);
+  //   } else {
+  //     setFilteredData([]);
+  //   }
+  // };.
   const handleSearch = (text) => {
     setSearchQuery(text);
     setIsCustomerSelected(false);
     if (text) {
       const results = data.filter((item) =>
-        item.toLowerCase().includes(text.toLowerCase())
+        item.name.toLowerCase().includes(text.toLowerCase())
       );
       setFilteredData(results);
     } else {
@@ -315,11 +337,20 @@ const CustomerInfo = () => {
   
  
 
+  // const handleSelectItem = (item) => {
+  //   setSearchQuery(item);
+  //   setFilteredData([]);
+  //   setIsCustomerSelected(true);
+  // };
   const handleSelectItem = (item) => {
-    setSearchQuery(item);
+    setSearchQuery(item.name);
+    setCustomerName(item.name);
+    setAddress(item.address);
+    setContactPerson(item.contactPerson);
     setFilteredData([]);
     setIsCustomerSelected(true);
   };
+
 
   const handleSelectModelItem = (item) => {
     setSearchModelQuery(item);
@@ -396,7 +427,7 @@ const CustomerInfo = () => {
           onChangeText={handleSearch}
         />
 
-        {filteredData.length > 0 && (
+        {/* {filteredData.length > 0 && (
           <FlatList
             data={filteredData}
             keyExtractor={(item) => item}
@@ -406,7 +437,28 @@ const CustomerInfo = () => {
               </TouchableOpacity>
             )}
           />
-        )}
+        )} */}
+         {filteredData.length > 0 && (
+        <FlatList
+          data={filteredData}
+          keyExtractor={(item) => item.name}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => handleSelectItem(item)}>
+              <Text style={styles.suggestionItem}>{item.name}</Text>
+            </TouchableOpacity>
+          )}
+        />
+      )}
+       {isCustomerSelected && (
+        <View style={styles.customerInfoContainer}>
+          <Text style={styles.customerName}>Customer Name: {customerName}</Text>
+          <Text style={styles.customerAddress}>Address: {address}</Text>
+          <Text style={styles.contactPerson}>Contact Person: {contactPerson}</Text>
+        </View>
+      )}
+
+      
+
 
         {filteredData.length === 0 && searchQuery.length > 0 && !isCustomerSelected && (
           
@@ -437,7 +489,52 @@ const CustomerInfo = () => {
           error={error}
         />
 
-        
+{isCustomerSelected &&
+          (
+          <>
+                     <Picker
+            selectedValue={selectedOptionType}
+            style={styles.picker}
+            onValueChange={(itemValue) => setSelectedOptionType(itemValue)}
+          >
+            <Picker.Item label="Select Type of Call" value="option1" />
+            <Picker.Item label="Breakdown" value="option2" />
+            <Picker.Item label="PPM" value="option3" />
+            <Picker.Item label="Installation" value="option4" />
+            <Picker.Item label="Inspection" value="option5" />
+            <Picker.Item label="Other" value="option6" />
+          </Picker>
+
+          {selectedOptionType === 'option6' && (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter Type of call"
+              value={otherCall}
+              onChangeText={setOtherCall}
+              
+            />
+          )}
+          <Picker
+            selectedValue={selectedOptionLocation}
+            style={styles.picker}
+            onValueChange={(itemValue) => setSelectedOptionLocation(itemValue)}
+          >
+            <Picker.Item label="Select Location" value="optiona1" />
+            <Picker.Item label="Smart Kitchen" value="optiona2" />
+            <Picker.Item label="Pantry" value="optiona3" />
+            <Picker.Item label="Gym" value="optiona4" />
+            <Picker.Item label="Other" value="optiona5" />
+          </Picker>
+          {selectedOptionLocation === 'option5' && (
+            <TextInput
+              style={styles.input}
+              placeholder="Enter a Location"
+              value={otherLocation}
+              onChangeText={setOtherLocation}
+            />
+          )} 
+          
+
         {/* Conditionally render the model search box */}
         {isCustomerSelected && (
           <>
@@ -463,6 +560,10 @@ const CustomerInfo = () => {
 
           </>
         )}
+
+
+
+
          {isEqpSelected &&
           (
           <>
@@ -518,7 +619,7 @@ const CustomerInfo = () => {
 
 
 
-{issnoSelected &&
+{/* {issnoSelected &&
           (
           <>
                      <Picker
@@ -541,9 +642,9 @@ const CustomerInfo = () => {
               value={otherCall}
               onChangeText={setOtherCall}
             />
-          )}
+          )} */}
 
-<Picker
+{/* <Picker
             selectedValue={selectedOptionLocation}
             style={styles.picker}
             onValueChange={(itemValue) => setSelectedOptionLocation(itemValue)}
@@ -561,7 +662,11 @@ const CustomerInfo = () => {
               value={otherLocation}
               onChangeText={setOtherLocation}
             />
-          )} 
+          )}  */}
+          
+{issnoSelected &&
+          (
+          <>
           <TextInput
             variant="outlined"
             label="Nature of complaint/visit"
@@ -602,7 +707,8 @@ const CustomerInfo = () => {
           </Picker>
 
           
-          
+          </>
+        )}
           
 
 
@@ -673,6 +779,35 @@ const CustomerInfo = () => {
 };
 
 const styles = StyleSheet.create({
+  customerInfoContainer: {
+    marginTop: 20,
+    padding: 10,
+    backgroundColor: '#f0f0f0',
+    borderRadius: 8,
+  },
+  customerName: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  customerAddress: {
+    fontSize: 14,
+    color: '#555',
+  },
+  contactPerson: {
+    fontSize: 14,
+    color: '#555',
+    marginTop: 5,
+  },
+  suggestionItem: {
+    padding: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+  },
+  searchInput: {
+    marginBottom: 20,
+    // other styles
+  },
   container: {
     flex: 1,
     padding: 5,

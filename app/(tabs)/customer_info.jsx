@@ -407,7 +407,7 @@ const CustomerInfo = () => {
         )}
 
         {filteredData.length === 0 && searchQuery.length > 0 && (
-          // {filteredData.length === 0 && searchQuery.length > 0 && (
+          
           // <Button
           //   style={styles.dailogBtn}
           //   title="Add"

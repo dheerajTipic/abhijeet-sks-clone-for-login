@@ -102,9 +102,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
-    backgroundColor: 'gray',
-    borderWidth:3,
-    borderRadius:30,
+     backgroundColor: '#D3D3D3',
+    borderWidth:4,
+    borderRadius:50,
   },
   filterInput: {
     marginBottom: 20,

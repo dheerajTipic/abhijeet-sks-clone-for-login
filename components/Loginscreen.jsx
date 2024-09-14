@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Alert, View, Text,TouchableOpacity } from 'react-native';
+import { StyleSheet, Alert, View, Text,TouchableOpacity, ImageBackground } from 'react-native';
 import {TextInput, IconButton } from '@react-native-material/core';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,7 +18,8 @@ const LoginScreen = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [showEmailSuggestion, setShowEmailSuggestion] = useState(true);
   const [setModalVisible] = useState(false);
-  
+  const backgroundImage = require('../assets/images/backgroundforlogin.jpg'); // Replace with your image path
+ 
   const ss = getToken();
    console.log(ss);
 
@@ -88,6 +89,7 @@ const LoginScreen = () => {
   // };
 
   return (
+    <ImageBackground source={backgroundImage} style={styles.background}>
     <View style={styles.container}>
       <Text style={styles.header} variant="h4">Login</Text>
       <View style={styles.Line}></View>
@@ -95,6 +97,7 @@ const LoginScreen = () => {
       <TextInput
         onChangeText={handleEmailChange}
         value={email}
+         variant="outlined"
         keyboardType="email-address"
         autoCapitalize="none"
         label="E-mail"
@@ -108,6 +111,7 @@ const LoginScreen = () => {
 
       <TextInput
         label="Password"
+         variant="outlined"
         onChangeText={(text) => setPassword(text)}
         value={password}
         secureTextEntry={!isPasswordVisible}
@@ -146,39 +150,51 @@ const LoginScreen = () => {
         <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
       </TouchableOpacity> */}
     </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  background: {
+    flex: 1,
+    width:'100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   container: {
-    width: '100%',
-    maxWidth: 400,
+   // marginTop:80,
+    width: '84%',
+   // maxWidth: 400,
     alignSelf: 'center',
     backgroundColor: '#ffffff',
     padding: 20,
+   // paddingVertical:10,
     borderRadius: 10,
     elevation: 5,
     shadowColor: '#000',
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.7,
     shadowRadius: 10,
-    shadowOffset: { width: 0, height: 5 },
+    shadowOffset: { width: 5, height: 5 },
     height: 450,
-    justifyContent: 'center',
+    justifyContent:'center',
+    
+   
+    
   },
   header: {
     alignSelf: 'center',
-    fontSize: 32,
+    fontSize: 40,
     fontWeight: 'bold',
     color: '#333',
-    marginBottom: 10,
+    marginBottom: 32,
   },
   input: {
-    marginBottom: 10,
+    marginBottom: 18,
   },
   suggestion: {
     fontSize: 14,
     color: '#999',
-    marginBottom: 10,
+    marginBottom: 15,
     textAlign: 'left',
   },
   error: {
@@ -198,8 +214,8 @@ const styles = StyleSheet.create({
     width: '100%',
     height: 2,
     backgroundColor: 'black',
-    marginVertical: 10,
-    marginBottom: 20,
+    marginVertical: 3,
+    marginBottom: 30,
   },
   forgotPasswordText: {
     marginTop: 15,

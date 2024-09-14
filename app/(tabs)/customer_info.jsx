@@ -219,6 +219,7 @@ const CustomerInfo = () => {
   const router = useRouter();
   const [otherCall, setOtherCall] = useState('');
   const [otherLocation, setOtherLocation] = useState('');
+  
  // const [otherCall, setOtherCall] = useState('');
 
   const data = [
@@ -264,6 +265,7 @@ const CustomerInfo = () => {
 
   const handleSearch = (text) => {
     setSearchQuery(text);
+    setIsCustomerSelected(false);
     if (text) {
       const results = data.filter((item) =>
         item.toLowerCase().includes(text.toLowerCase())
@@ -406,7 +408,7 @@ const CustomerInfo = () => {
           />
         )}
 
-        {filteredData.length === 0 && searchQuery.length > 0 && (
+        {filteredData.length === 0 && searchQuery.length > 0 && !isCustomerSelected && (
           
           // <Button
           //   style={styles.dailogBtn}

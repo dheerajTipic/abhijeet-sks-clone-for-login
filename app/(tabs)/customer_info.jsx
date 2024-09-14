@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, FlatList, Animated, Easing, Modal } from 'react-native';
 import { useRouter } from 'expo-router';
@@ -5,6 +6,8 @@ import { Provider, Stack, Button, DialogHeader, DialogContent, DialogActions, Te
 import { Picker } from '@react-native-picker/picker';
 import { router } from 'expo-router';
 import AddTable from '../../components/addItem';
+// import SignaturePad from '../../components/Signature_pad'
+// import { SafeAreaView } from 'react-native-safe-area-context';
 
 
 //......................................................Dailog
@@ -21,11 +24,11 @@ const AnimatedDialog = ({ visible, onClose, onSubmit, customerName, setCustomerN
     // value={searchModelQuery}
 if (customerName.trim() === '' || address.trim() === '' || contactPerson.trim() === '' || email.trim() === '') {  
 setErrord('All fields are required!');
-
+ 
 } else {
 setErrord('');
 onClose();
-router.push('/profile');
+router.push('/customer_info');
 
 setCustomerName('');
 setAddress('');
@@ -370,7 +373,7 @@ const CustomerInfo = () => {
     }
   };
   const handleSubmitsign = () => {
-
+<SignaturePad/>
   }
   return (
     <View style={styles.container}>
@@ -644,6 +647,9 @@ const CustomerInfo = () => {
           <View>
             {/* <View style={{height:2,width:'85%',backgroundColor:'black',alignSelf:'center'}}></View> */}
             <AddTable/>
+            {/* <SafeAreaView style={{ flex: 1 }}>
+      <SignaturePad />
+    </SafeAreaView> */}
             <TouchableOpacity style={styles.customButtonclose} onPress={handlecancel}>
             <Text style={styles.buttonText}>close Table</Text>
           </TouchableOpacity>

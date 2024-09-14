@@ -158,7 +158,7 @@ const Profile = () => {
       <Modal
         transparent={true}
         visible={modalVisible.changePassword}
-        onRequestClose={() => closeModal('changePassword')}
+        onRequestClose={() => closeModal(closeModal)}
         animationType="fade"
       >
         <View style={styles.modalBackground}>
@@ -191,7 +191,7 @@ const Profile = () => {
               value={ reEnterPassword}
               onChangeText={ setReEnterPassword}
             />
-            <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('changePassword')}>
+            <TouchableOpacity style={styles.closeButton} onPress={(handlePasswordSubmit) => closeModal('changePassword')}>
               <Text style={styles.closeButtonText}>Submit</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('changePassword')}>
@@ -221,6 +221,7 @@ const styles = StyleSheet.create({
   topButton: {
     padding: 8,
     marginLeft: 10,
+    marginTop:30,
     backgroundColor: '#007BFF',
     borderRadius: 5,
     alignSelf:'flex-start',

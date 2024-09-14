@@ -1,8 +1,9 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Animated, TextInput } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, Modal, Animated, TextInput,ScrollView } from 'react-native';
 import { deleteToken, getToken } from '../util/asyncStorage';
 import { router } from 'expo-router';
 import { post} from '../util/api';
+//import { ScrollView } from 'react-native-web';
 
 const Profile = () => {
   const [modalVisible, setModalVisible] = useState({ total: false, complete: false, pending: false, options: false, logout: false, changePassword: false });
@@ -165,6 +166,7 @@ const Profile = () => {
           <View style={styles.modalContainer}>
             <Text style={styles.modalTitle}>Change Password</Text>
             {/* <Text style={styles.modalContent}>Please enter your new password:</Text> */}
+            <ScrollView contentContainerStyle={styles.scrollContainer}>
             <TextInput
               style={styles.textInput}
               placeholder="email_id"
@@ -197,6 +199,7 @@ const Profile = () => {
             <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('changePassword')}>
               <Text style={styles.closeButtonText}>Cancel</Text>
             </TouchableOpacity>
+            </ScrollView>
           </View>
         </View>
       </Modal>
@@ -281,6 +284,11 @@ const styles = StyleSheet.create({
     fontSize: 50,
     fontWeight: 'bold',
     alignSelf: 'center',
+  },
+  scrollContainer: {
+    //flexGrow: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   modalBackground: {
     flex: 1,

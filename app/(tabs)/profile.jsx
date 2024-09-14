@@ -57,6 +57,7 @@ const Profile = () => {
     
       await deleteToken();
       // const s = getToken
+      setModalVisible((prev) => ({ ...prev, logout: false }));
     router.push('/'); // Navigate to homepage
     } catch (error) {
       console.error('Error during delete token or navigation:', error);
@@ -142,9 +143,9 @@ const Profile = () => {
             <Text style={styles.modalTitle}>Log Out</Text>
             <Text style={styles.modalContent}>Are you sure you want to log out?</Text>
             <View style={styles.buttonRow}>
-              <TouchableOpacity style={styles.closeButton} onPress={handlePress} >
-                <Text style={styles.closeButtonText} >Yes</Text>
-              </TouchableOpacity>
+            <TouchableOpacity style={styles.closeButton} onPress={handlePress}>
+  <Text style={styles.closeButtonText}>Yes</Text>
+</TouchableOpacity>
               <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('logout')}>
                 <Text style={styles.closeButtonText}>No</Text>
               </TouchableOpacity>
@@ -190,7 +191,7 @@ const Profile = () => {
               value={ reEnterPassword}
               onChangeText={ setReEnterPassword}
             />
-            <TouchableOpacity style={styles.closeButton} onPress={handlePasswordSubmit}>
+            <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('changePassword')}>
               <Text style={styles.closeButtonText}>Submit</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.closeButton} onPress={() => closeModal('changePassword')}>

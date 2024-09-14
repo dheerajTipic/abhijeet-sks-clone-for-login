@@ -5,6 +5,8 @@ import { Provider, Stack, Button, DialogHeader, DialogContent, DialogActions, Te
 import { Picker } from '@react-native-picker/picker';
 import { router } from 'expo-router';
 import AddTable from '../../components/addItem';
+
+
 //......................................................Dailog
 const AnimatedDialog = ({ visible, onClose, onSubmit, customerName, setCustomerName, address, setAddress, contactPerson, setContactPerson, email, setEmail, error }) => {
   const [show, setShow] = useState(visible);
@@ -231,6 +233,9 @@ const CustomerInfo = () => {
     'Tata',
     'aaa',
     'demo1',
+    'Microwave',
+    'Blender',
+    'Food Processor',
 
   
   ];
@@ -265,6 +270,7 @@ const CustomerInfo = () => {
       setFilteredData([]);
     }
   };
+  
 
   const handleEqpSearch = (text) => {
     setSearchEqpQuery(text);
@@ -363,7 +369,9 @@ const CustomerInfo = () => {
       
     }
   };
- 
+  const handleSubmitsign = () => {
+
+  }
   return (
     <View style={styles.container}>
       <Image
@@ -592,10 +600,28 @@ const CustomerInfo = () => {
           
 
 
-<View style={{display:"flex",alignItems:'center', justifyContent:'space-between',flexDirection:'row',width:"100%", marginTop:8,marginStart:'10'}}>
+<View style={{ display: "flex", 
+  alignItems: 'center', 
+  justifyContent: 'space-between', 
+  flexDirection: 'row', 
+  width: "100%", 
+  marginTop: 10, 
+  marginBottom:15,
+  paddingHorizontal: 8}}>
 <TouchableOpacity style={styles.customButtona} onPress={handleAddItem}>
-            <Text style={styles.buttonText}>Add Item</Text>
+            <Text style={styles.buttonText}>Add spare parts</Text>
           </TouchableOpacity>
+
+          <TouchableOpacity style={styles.customButton} onPress={handleSubmit}>
+          <Text style={styles.buttonText}>Save</Text>
+        </TouchableOpacity>
+        
+        <TouchableOpacity style={styles.customButtonsign} onPress={handleSubmitsign}>
+          <Text style={styles.buttonText}>Sign</Text>
+        </TouchableOpacity>
+        
+        
+        
          
           {/* <TouchableOpacity style={styles.customButtons} onPress={handleSubmits}>
             <Text style={styles.buttonText}>Save</Text>
@@ -616,20 +642,22 @@ const CustomerInfo = () => {
         
         {isVisible && (
           <View>
-            <View style={{height:2,width:'85%',backgroundColor:'black',alignSelf:'center'}}></View>
+            {/* <View style={{height:2,width:'85%',backgroundColor:'black',alignSelf:'center'}}></View> */}
             <AddTable/>
             <TouchableOpacity style={styles.customButtonclose} onPress={handlecancel}>
             <Text style={styles.buttonText}>close Table</Text>
           </TouchableOpacity>
+          
+          
           </View>
         )}
 
           </>
         )}
 
-        <TouchableOpacity style={styles.customButton} onPress={handleSubmit}>
+        {/* <TouchableOpacity style={styles.customButton} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Save</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </ScrollView>
     </View>
   );
@@ -668,12 +696,53 @@ const styles = StyleSheet.create({
   },
   customButton: {
     backgroundColor: 'green',
-    marginTop: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    marginHorizontal: 120,
-    borderRadius: 12,
-    borderWidth: 2,
+    marginTop: 9,
+    paddingVertical: 6,
+    paddingHorizontal: 24,
+    // marginHorizontal: 120,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: 'black',
+    alignItems: 'center',
+    marginBottom: 15,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 5,
+  },
+
+  customButtona: {
+   // marginRight: 10,
+   height:36,
+    marginTop:9,
+    backgroundColor: 'black',
+    paddingVertical: 6,
+    paddingHorizontal: 6,
+   // marginHorizontal: 70,
+  // marginleft:20,
+    borderRadius: 5,
+    borderWidth: 1,
+    borderColor: 'black',
+    alignItems: 'center',
+    marginBottom: 15,
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 5,
+    height:36,
+  },
+  customButtonsign: {
+    backgroundColor: 'green',
+    height:36,
+    marginTop: 9,
+    paddingVertical: 6,
+    paddingHorizontal: 24,
+    // marginHorizontal: 120,
+    marginStart:20,
+    borderRadius: 8,
+    borderWidth: 1,
     borderColor: 'black',
     alignItems: 'center',
     marginBottom: 15,
@@ -796,6 +865,7 @@ marginTop: 5,
     elevation: 5,
     width:80,
   },
+  
   customButtoncancel:{
     marginTop: 10,
    // marginLeft:2,
@@ -815,24 +885,7 @@ marginTop: 5,
     elevation: 5,
     width:80,
   },
-  customButtona: {
-    marginRight: 10,
-    marginTop:20,
-    backgroundColor: 'blue',
-    paddingVertical: 10,
-    paddingHorizontal: 12,
-    marginHorizontal: 70,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: 'black',
-    alignItems: 'center',
-    marginBottom: 15,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.2,
-    shadowRadius: 15,
-    elevation: 5,
-  },
+  
   customButtons: {
     marginTop: 20,
     marginLeft:35,

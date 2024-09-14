@@ -3,7 +3,7 @@ import { StyleSheet, Alert, View, Text,TouchableOpacity } from 'react-native';
 import {TextInput, IconButton } from '@react-native-material/core';
 import Icon from "@expo/vector-icons/MaterialCommunityIcons";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {login}from '../app/util/api'; // Ensure you have this API util
+import {login, post}from '../app/util/api'; // Ensure you have this API util
 import { router, userouter } from 'expo-router';
 
 // Import token storage functions
@@ -62,7 +62,7 @@ const LoginScreen = () => {
     if (validate()) {
       try {
         // Replace 'login' API with your actual login logic
-        // const response = await post('/api/login',{ email, password });
+        // const response = await post('api/login',{ email, password });
         const response = await login({ email, password });
         
         if (response.token) {

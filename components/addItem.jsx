@@ -281,7 +281,7 @@ const AddTable = () => {
           style={styles.input}
         />
         <RNMaterialTextInput
-          label="Desciptiont"
+          label="Description"
           value={newItem.quantity}
           onChangeText={text => setNewItem({ ...newItem, quantity: text })}
         //  keyboardType="numeric"

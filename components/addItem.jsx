@@ -93,12 +93,19 @@ const AddTable = ({ isVisible, onClose }) => {
               onChangeText={text => setNewItem({ ...newItem, remark: text })}
               style={styles.input}
             />
+
+<View style={{display:"flex",alignItems:'center', justifyContent:'space-between',flexDirection:'row',width:"100%", marginTop:8,
+
+}}>
+
+
             <TouchableOpacity style={styles.addButton} onPress={handleAddItem}>
               <Text style={styles.buttonText}>Add Item</Text>
             </TouchableOpacity>
             <TouchableOpacity style={styles.closeButton} onPress={onClose}>
               <Text style={styles.buttonText}>Close Table</Text>
             </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -169,23 +176,23 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     paddingVertical: 10,
     paddingHorizontal: 15,
-    alignSelf: 'center',
+     alignSelf: 'center',
     borderRadius: 8,
     borderWidth: 2,
     borderColor: 'black',
-    alignItems: 'center',
+     alignItems: 'center',
     marginBottom: 15,
   },
   closeButton: {
     backgroundColor: 'red',
     paddingVertical: 10,
     paddingHorizontal: 15,
-    alignSelf: 'center',
+   alignSelf: 'center',
     borderRadius: 8,
     borderWidth: 2,
     borderColor: 'black',
-    alignItems: 'center',
-    marginTop: 10,
+   alignItems: 'center',
+    marginTop: 15,
   },
   buttonText: {
     color: '#fff',

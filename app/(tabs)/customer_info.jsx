@@ -10,6 +10,7 @@ import AddTable from '../../components/addItem';
 // import { SafeAreaView } from 'react-native-safe-area-context';
 
 
+
 //......................................................Dailog
 const AnimatedDialog = ({ visible, onClose, onSubmit, customerName, setCustomerName, address, setAddress, contactPerson, setContactPerson, email, setEmail, error }) => {
   const [show, setShow] = useState(visible);
@@ -768,6 +769,20 @@ const CustomerInfo = () => {
           
 
           <Text style={styles.logoHeading1}>Service Engineer: Swapnil Patil </Text>
+
+          {isVisible && (
+          <View>
+            <View style={{height:2,width:'85%',backgroundColor:'black',alignSelf:'center'}}></View>
+            <AddTable/>
+            <TouchableOpacity style={styles.customButtonclose} onPress={handlecancel}>
+            <Text style={styles.buttonText}>close Table</Text>
+          </TouchableOpacity>
+          </View>
+        )}
+
+        
+
+          
 <View style={{ display: "flex", 
   alignItems: 'center', 
   justifyContent: 'space-between', 
@@ -784,9 +799,9 @@ const CustomerInfo = () => {
         <Text style={styles.buttonText}>Add Spare Parts</Text>
       </TouchableOpacity>
 
-      {isVisible && (
+      {/* {isVisible && (
         <AddTable isVisible={isVisible} onClose={handleClose} />
-      )}
+      )} */}
     </View>
 
           <TouchableOpacity style={styles.customButton} onPress={handleSubmit}>

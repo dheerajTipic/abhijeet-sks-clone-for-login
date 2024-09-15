@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, FlatList, Animated, Easing, Modal } from 'react-native';
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity, FlatList, Animated, Easing, Modal,Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Provider, Stack, Button, DialogHeader, DialogContent, DialogActions, TextInput } from "@react-native-material/core";
 import { Picker } from '@react-native-picker/picker';
@@ -185,6 +185,7 @@ const CustomerInfo = () => {
   const [address, setAddress] = useState('');
   const [contactPerson, setContactPerson] = useState('');
  // const [equipmentName, setequipmentName] = useState();
+ const [customersug, setCustomersug] = useState('');
 
  const [visit, setVisit] = useState('');
  const [actualFault, setActualFault] = useState('');
@@ -221,6 +222,7 @@ const CustomerInfo = () => {
   const router = useRouter();
   const [otherCall, setOtherCall] = useState('');
   const [otherLocation, setOtherLocation] = useState('');
+  const [reportNumber, setReportNumber] = useState(1); 
   
  // const [otherCall, setOtherCall] = useState('');
 
@@ -275,6 +277,7 @@ const CustomerInfo = () => {
     'Model1617',
   ];
   const snoData = [
+    
     '1234',
     '5678',
     '91011',
@@ -282,6 +285,7 @@ const CustomerInfo = () => {
     '1415',
     'M617',
   ];
+  
  
   
 
@@ -399,6 +403,16 @@ const CustomerInfo = () => {
     if ( searchQuery.trim() === ''||  searchModelQuery.trim() === ''|| searchEqpQuery.trim() === '') {  
       setError('All fields are required!');
     } else {
+
+
+      // setReportNumber(prevNumber => prevNumber + 1);
+
+      // // Display the popup alert with the report number
+      // Alert.alert(
+      //   'Success',
+      //   `Service report no - ${reportNumber} generated successfully`,
+      //   [{ text: 'OK', onPress: () => console.log('OK Pressed') }]
+      // );
       setError('');
       router.push('/profile');
       
@@ -723,8 +737,8 @@ const CustomerInfo = () => {
             variant="outlined"
             label="Customer Suggestion"
             style={styles.searchInput}
-           // value={visit}
-          //  onChangeText={setVisit}
+           value={customersug}
+           onChangeText={setCustomersug}
             multiline
             maxLength={200}
           />
@@ -753,7 +767,7 @@ const CustomerInfo = () => {
         )} */}
           
 
-          <Text style={styles.logoHeading1}>Service Engineer: D@123.com </Text>
+          <Text style={styles.logoHeading1}>Service Engineer: Swapnil Patil </Text>
 <View style={{ display: "flex", 
   alignItems: 'center', 
   justifyContent: 'space-between', 
@@ -792,6 +806,8 @@ const CustomerInfo = () => {
           
   
 </View>
+
+
           {/* <TouchableOpacity style={styles.customButton} onPress={handleAddItem}>
             <Text style={styles.buttonText}>Add Item</Text>
           </TouchableOpacity>

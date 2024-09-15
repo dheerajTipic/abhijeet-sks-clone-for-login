@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TextInput, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal } from 'react-native';
 import { TextInput as RNMaterialTextInput } from "@react-native-material/core";
 import Animated, { Layout, FadeIn, FadeOut } from 'react-native-reanimated';
 
 const AddTable = ({ isVisible, onClose }) => {
   const [filterText, setFilterText] = useState('');
-  const [items, setItems] = useState([]);
+  const [items, setItems] = useState([
+    //  { id: '1', name: 'sam', quantity: 10, price: 100 },
+    //  { id: '2', name: 'sagar', quantity: 20, price: 200 },
+    // // More items...
+  ]);
+
 
   const [newItem, setNewItem] = useState({ name: '', quantity: '', price: '', remark: '' });
 
@@ -55,7 +60,7 @@ const AddTable = ({ isVisible, onClose }) => {
                 <View style={styles.header}>
                   <Text style={styles.headerText}>Item</Text>
                   <Text style={styles.headerText}>Description</Text>
-                  <Text style={styles.headerText}>Quntity</Text>
+                  <Text style={styles.headerText}>Quantity</Text>
                   <Text style={styles.headerText}>Remarks</Text>
                 </View>
               }

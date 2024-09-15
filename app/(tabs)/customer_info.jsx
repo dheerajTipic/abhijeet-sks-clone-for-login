@@ -177,6 +177,8 @@ setEmail('');
     </Modal>
   );
 };
+
+
 //......................................................Dailog End
 const CustomerInfo = () => {
   const [customerName, setCustomerName] = useState('');
@@ -718,9 +720,28 @@ const CustomerInfo = () => {
           
           </>
         )}
+         {isVisible && (
+          <View>
+            {/* <View style={{height:2,width:'85%',backgroundColor:'black',alignSelf:'center'}}></View> */}
+            <AddTable/>
+
+            {/* <SafeAreaView style={{ flex: 1 }}>
+      <SignaturePad />
+    </SafeAreaView> */}
+            <TouchableOpacity style={styles.customButtonclose} onPress={handlecancel}>
+            <Text style={styles.buttonText}>close Table</Text>
+
+          </TouchableOpacity>
+
+
+         
+          
+          </View>
+          
+        )}
           
 
-
+          <Text style={styles.logoHeading1}>Service Engineer: D@123.com </Text>
 <View style={{ display: "flex", 
   alignItems: 'center', 
   justifyContent: 'space-between', 
@@ -761,14 +782,14 @@ const CustomerInfo = () => {
           
 
         
-        {isVisible && (
+        {/* {isVisible && (
           <View>
-            {/* <View style={{height:2,width:'85%',backgroundColor:'black',alignSelf:'center'}}></View> */}
+            <View style={{height:2,width:'85%',backgroundColor:'black',alignSelf:'center'}}></View>
             <AddTable/>
 
-            {/* <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{ flex: 1 }}>
       <SignaturePad />
-    </SafeAreaView> */}
+    </SafeAreaView>
             <TouchableOpacity style={styles.customButtonclose} onPress={handlecancel}>
             <Text style={styles.buttonText}>close Table</Text>
 
@@ -778,7 +799,8 @@ const CustomerInfo = () => {
          
           
           </View>
-        )}
+          
+        )} */}
 
           </>
         )}
@@ -961,6 +983,13 @@ const styles = StyleSheet.create({
   logoHeading: {
     fontSize: 18,
     marginBottom: 8,
+    fontWeight: 'bold',
+    alignSelf: 'center',
+  },
+  logoHeading1: {
+    fontSize: 18,
+    marginBottom: 12,
+    marginTop:25,
     fontWeight: 'bold',
     alignSelf: 'center',
   },

@@ -1,24 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
-import { TextInput as RNMaterialTextInput, Button } from "@react-native-material/core";
+import { View, Text, FlatList, StyleSheet, TextInput, TouchableOpacity, Modal } from 'react-native';
+import { TextInput as RNMaterialTextInput } from "@react-native-material/core";
 import Animated, { Layout, FadeIn, FadeOut } from 'react-native-reanimated';
 
-const AddTable = () => {
+const AddTable = ({ isVisible, onClose }) => {
   const [filterText, setFilterText] = useState('');
-  
-  const [items, setItems] = useState([
-    //  { id: '1', name: '', quantity: 10, price: 100 },
-    //  { id: '2', name: '', quantity: 20, price: 200 },
-    // More items...
-  ]);
+  const [items, setItems] = useState([]);
 
-  const [newItem, setNewItem] = useState({ name: '', quantity: '', price: '',remark:'' });
+  const [newItem, setNewItem] = useState({ name: '', quantity: '', price: '', remark: '' });
 
   const handleAddItem = () => {
     if (newItem.name && newItem.quantity && newItem.price && newItem.remark) {
       const id = (items.length + 1).toString();
       setItems([...items, { id, ...newItem }]);
-      setNewItem({ name: '', quantity: '', price: '',remark:'' ,});
+      setNewItem({ name: '', quantity: '', price: '', remark: '' });
     }
   };
 
@@ -41,84 +36,88 @@ const AddTable = () => {
   );
 
   return (
-    <View style={styles.container}>
-      {/* Filter Input */}
-      <RNMaterialTextInput
-        label="Filter by Equipment name"
-        value={filterText}
-        onChangeText={setFilterText}
-        style={styles.filterInput}
-      />
+    <Modal visible={isVisible} transparent animationType="fade" onRequestClose={onClose}>
+      <View style={styles.modalOverlay}>
+        <View style={styles.modalContent}>
+          <RNMaterialTextInput
+            label="Filter by Equipment name"
+            value={filterText}
+            onChangeText={setFilterText}
+            style={styles.filterInput}
+          />
 
-      {/* Table */}
-      <View style={styles.table}>
-        <Animated.FlatList
-          data={filteredItems}
-          renderItem={renderItem}
-          keyExtractor={item => item.id}
-          ListHeaderComponent={
-            <View style={styles.header}>
-              <Text style={styles.headerText}>Item </Text>
-              <Text style={styles.headerText}>Description</Text>
-              <Text style={styles.headerText}>Qty</Text>
-              <Text style={styles.headerText}>Remarks</Text>
-            </View>
-          }
-        />
+          <View style={styles.table}>
+            <Animated.FlatList
+              data={filteredItems}
+              renderItem={renderItem}
+              keyExtractor={item => item.id}
+              ListHeaderComponent={
+                <View style={styles.header}>
+                  <Text style={styles.headerText}>Item</Text>
+                  <Text style={styles.headerText}>Description</Text>
+                  <Text style={styles.headerText}>Quntity</Text>
+                  <Text style={styles.headerText}>Remarks</Text>
+                </View>
+              }
+            />
+          </View>
+
+          <View style={styles.form}>
+            <RNMaterialTextInput
+              label="Item"
+              value={newItem.name}
+              onChangeText={text => setNewItem({ ...newItem, name: text })}
+              style={styles.input}
+            />
+            <RNMaterialTextInput
+              label="Description"
+              value={newItem.quantity}
+              onChangeText={text => setNewItem({ ...newItem, quantity: text })}
+              style={styles.input}
+            />
+            <RNMaterialTextInput
+              label="Qty"
+              value={newItem.price}
+              onChangeText={text => setNewItem({ ...newItem, price: text })}
+              keyboardType="numeric"
+              style={styles.input}
+            />
+            <RNMaterialTextInput
+              label="Remark"
+              value={newItem.remark}
+              onChangeText={text => setNewItem({ ...newItem, remark: text })}
+              style={styles.input}
+            />
+            <TouchableOpacity style={styles.addButton} onPress={handleAddItem}>
+              <Text style={styles.buttonText}>Add Item</Text>
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+              <Text style={styles.buttonText}>Close Table</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
       </View>
-
-      {/* Add Item Form */}
-      <View style={styles.form}>
-        <RNMaterialTextInput
-          label="Item"
-          value={newItem.name}
-          onChangeText={text => setNewItem({ ...newItem, name: text })}
-          style={styles.input}
-        />
-        <RNMaterialTextInput
-          label="Description"
-          value={newItem.quantity}
-          onChangeText={text => setNewItem({ ...newItem, quantity: text })}
-         // keyboardType="numeric"
-          style={styles.input}
-        />
-        <RNMaterialTextInput
-          label="Qty"
-          value={newItem.price}
-          onChangeText={text => setNewItem({ ...newItem, price: text })}
-          keyboardType="numeric"
-          style={styles.input}
-        />
-         <RNMaterialTextInput
-          label="Remark"
-          value={newItem.remark}
-          onChangeText={text => setNewItem({ ...newItem, remark: text })}
-         // keyboardType="numeric"
-          style={styles.input}
-        />
-        {/* <Button
-          title="Add Item"
-          onPress={handleAddItem}
-          style={styles.addButton}
-          contentContainerStyle={styles.addButtonContent}
-        /> */}
-        <TouchableOpacity style={styles.addButton}    onPress={handleAddItem}>
-  <Text style={styles.buttonText}>Add Item</Text>    
-</TouchableOpacity>
-      </View>
-
-
-    </View>
+    </Modal>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  modalOverlay: {
     flex: 1,
-    padding: 20,
-     backgroundColor: '#D3D3D3',
-    borderWidth:4,
-    borderRadius:25,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Dark background to give a modal feel
+  },
+  modalContent: {
+    width: '92%',
+    padding: 8,
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 5,
   },
   filterInput: {
     marginBottom: 20,
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
   headerText: {
     flex: 1,
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 13,
   },
   row: {
     flexDirection: 'row',
@@ -153,36 +152,35 @@ const styles = StyleSheet.create({
   },
   cell: {
     flex: 1,
-    fontSize: 14,
+    fontSize: 12,
   },
   form: {
-    marginTop: 30,
+    marginTop: 20,
   },
   input: {
     marginBottom: 15,
   },
   addButton: {
     backgroundColor: 'black',
-    // marginTop: 20,
-    paddingVertical: 4,
+    paddingVertical: 10,
     paddingHorizontal: 15,
-    width:'60%',
-   // marginStart: 255,
     alignSelf: 'center',
-    marginEnd: 10,
     borderRadius: 8,
     borderWidth: 2,
     borderColor: 'black',
     alignItems: 'center',
     marginBottom: 15,
-    shadowColor: '#000000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.2,
-    shadowRadius: 15,
-    elevation: 5,
   },
-  addButtonContent: {
+  closeButton: {
+    backgroundColor: 'red',
     paddingVertical: 10,
+    paddingHorizontal: 15,
+    alignSelf: 'center',
+    borderRadius: 8,
+    borderWidth: 2,
+    borderColor: 'black',
+    alignItems: 'center',
+    marginTop: 10,
   },
   buttonText: {
     color: '#fff',

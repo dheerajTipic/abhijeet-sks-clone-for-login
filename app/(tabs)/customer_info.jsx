@@ -45,7 +45,7 @@ setEmail('');
         Animated.timing(scaleValue, {
           toValue: 1,
           duration: 300,
-          easing: Easing.out(Easing.ease),
+          easing: Easing.out(Easing.ease), 
           useNativeDriver: true,
         }).start(),
         Animated.timing(opacityValue, {
@@ -237,10 +237,10 @@ const CustomerInfo = () => {
   const data = [
     { name: 'Hayat Hotel', address: 'Kevesh nagar Mundava ', contactPerson: 'samir sutar' },
     { name: 'Tipic', address: 'akurdi-pune', contactPerson: 'Tejas Patil' },
-    { name: 'Swad', address: '789 Central Ave', contactPerson: 'Michael Johnson' },
-    { name: 'Swayananad', address: '987 Elm St', contactPerson: 'Emma Williams' },
-    { name: 'Anant Hotel', address: '654 Oak St', contactPerson: 'Olivia Brown' },
-    { name: 'PureVeg Hotel', address: '321 Maple Rd', contactPerson: 'Liam Davis' },
+    { name: 'Swad', address: 'Shaniwar wada pune', contactPerson: 'Rohit palkar' },
+    { name: 'Swayananad', address: '', contactPerson: 'suraj nikam' },
+    { name: 'Anant Hotel', address: '654 Oak St', contactPerson: 'satish power' },
+    { name: 'PureVeg Hotel', address: '321 Maple Rd', contactPerson: 'Satish dinde'},
     { name: 'NonVeg Hotel', address: '159 Pine St', contactPerson: 'Sophia Wilson' },
   ];
   const eqpData =[
@@ -378,7 +378,9 @@ const CustomerInfo = () => {
   const handlecancel= () => {
     setIsVisible(false); // Show the table when the button is clicked
   };
-
+  const handleClose = () => {
+    setIsVisible(false);
+  };
   
 
   const handleSubmit = () => {
@@ -720,14 +722,14 @@ const CustomerInfo = () => {
           
           </>
         )}
-         {isVisible && (
+         {/* {isVisible && (
           <View>
-            {/* <View style={{height:2,width:'85%',backgroundColor:'black',alignSelf:'center'}}></View> */}
+            <View style={{height:2,width:'85%',backgroundColor:'black',alignSelf:'center'}}></View>
             <AddTable/>
 
-            {/* <SafeAreaView style={{ flex: 1 }}>
+            <SafeAreaView style={{ flex: 1 }}>
       <SignaturePad />
-    </SafeAreaView> */}
+    </SafeAreaView>
             <TouchableOpacity style={styles.customButtonclose} onPress={handlecancel}>
             <Text style={styles.buttonText}>close Table</Text>
 
@@ -738,7 +740,7 @@ const CustomerInfo = () => {
           
           </View>
           
-        )}
+        )} */}
           
 
           <Text style={styles.logoHeading1}>Service Engineer: D@123.com </Text>
@@ -750,9 +752,18 @@ const CustomerInfo = () => {
   marginTop: 10, 
   marginBottom:15,
   paddingHorizontal: 8}}>
-<TouchableOpacity style={styles.customButtona} onPress={handleAddItem}>
+{/* <TouchableOpacity style={styles.customButtona} onPress={handleAddItem}>
             <Text style={styles.buttonText}>Add spare parts</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          <View>
+      <TouchableOpacity style={styles.customButtona} onPress={handleAddItem}>
+        <Text style={styles.buttonText}>Add Spare Parts</Text>
+      </TouchableOpacity>
+
+      {isVisible && (
+        <AddTable isVisible={isVisible} onClose={handleClose} />
+      )}
+    </View>
 
           <TouchableOpacity style={styles.customButton} onPress={handleSubmit}>
           <Text style={styles.buttonText}>Save</Text>
@@ -911,6 +922,11 @@ const styles = StyleSheet.create({
     shadowRadius: 15,
     elevation: 5,
     height:36,
+  },
+  containerasp: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   customButtonsign: {
     backgroundColor: 'green',

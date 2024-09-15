@@ -245,7 +245,17 @@ const CustomerInfo = () => {
   ];
   const eqpData =[
     
+    
+    'Bajaj fan',
+    'Bajaj oven',
+    'Bajaj microwave',
+    'Bajaj mixer',
     'Bajaj',
+    'crompton fan',
+    'crompton ac',
+    'crompton heater',
+    'crompton mixer',
+    'hitachi ac',
     'Tata',
     'aaa', 
     'demo1',

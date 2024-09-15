@@ -18,7 +18,7 @@ const LoginScreen = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [showEmailSuggestion, setShowEmailSuggestion] = useState(true);
   const [setModalVisible] = useState(false);
-  const backgroundImage = require('../assets/images/backgroundforlogin.jpg'); // Replace with your image path
+  const backgroundImage = require('../assets/images/main.jpg'); // Replace with your image path
  
   const ss = getToken();
    console.log(ss);
